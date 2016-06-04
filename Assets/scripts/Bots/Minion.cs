@@ -25,6 +25,9 @@ public class Minion : MonoBehaviour
 
     public int min_dis = 100;
 
+
+	public string[] tagsToAvoid;
+
     /* Gameplay settings */
     public Transform target;
 
@@ -44,6 +47,8 @@ public class Minion : MonoBehaviour
     // called in fixed time, fancy!
     void FixedUpdate()
     {
+		
+
         /* verify range */
         float range = Vector2.Distance(transform.position, target.position);
 
@@ -68,6 +73,7 @@ public class Minion : MonoBehaviour
             }
             else
             {
+				
                 /* Get the player! */
                 transform.position = Vector2.MoveTowards(transform.position, target.position, d_speed * Time.deltaTime);
             }
@@ -134,4 +140,14 @@ public class Minion : MonoBehaviour
 
         }
     }
+
+
+
+	bool ShouldAvoidTag(string tag) {
+		foreach (string element in tagsToAvoid)
+			if (tag == element)
+				return true;
+		return false;
+	}
+
 }

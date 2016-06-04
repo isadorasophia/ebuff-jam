@@ -54,7 +54,6 @@ public class Shooter : MonoBehaviour {
 			}
 
 			currentDirection = currentDirection.normalized;
-			Debug.Log (currentDirection.ToString ());
 
 			SetState ();
 		}
