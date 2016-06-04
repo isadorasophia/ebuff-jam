@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Walker : MonoBehaviour {
+public class Shooter : MonoBehaviour {
 
 
 	public StateController controller;
+	public GameObject projectilePrefab;
 	public float moveDelay;
+	public float shotDelay;
 	public AudioClip[] clips;
 
 	private float timeOfLastMovement;
+	private float timeOfLastShot;
 	private Vector2 currentDirection;
 
 	private Animator animator;
@@ -54,6 +57,15 @@ public class Walker : MonoBehaviour {
 			Debug.Log (currentDirection.ToString ());
 
 			SetState ();
+		}
+
+
+		if (Time.timeSinceLevelLoad > timeOfLastShot + shotDelay) {
+			if (controller.actions.Attack.WasPressed) {
+				GameObject currentProjectile = Instantiate (projectilePrefab) as GameObject;
+				ProjectileBehavior pb = currentProjectile.GetComponent<ProjectileBehavior> ();
+				pb.direction = Vector2.up * currentDirection.y + Vector2.right * currentDirection.x;
+			}
 		}
 	}
 
