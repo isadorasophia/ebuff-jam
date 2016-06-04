@@ -7,12 +7,13 @@ public abstract class ProjectileBehavior : MonoBehaviour {
 	public string[] tagsToHit;
 
 	// Use this for initialization
-	void Start () {
+	public virtual void Start () {
+
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	public virtual void  Update () {
+
 	}
 
 
@@ -23,7 +24,7 @@ public abstract class ProjectileBehavior : MonoBehaviour {
 
 	protected abstract void Boom ();
 
-	bool ShouldHitTag(string tag) {
+	public bool ShouldHitTag(string tag) {
 		foreach (string element in tagsToHit)
 			if (tag == element)
 				return true;

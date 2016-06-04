@@ -4,11 +4,30 @@ using System.Collections;
 public class StandardProjectile : ProjectileBehavior {
 
 	public float lifetime = 3;
+	public float dist = 3, angle=60;
+	public float numberOfRaycasts = 10;
 
+	public override void Start() {
+		Boom();
+	}
 
 
 	protected override void Boom () {
-		Invoke ("DestroyBullet", lifetime);
+
+		for (int i = 0; i < numberOfRaycasts; i++) {
+
+			RaycastHit2D[] hit = Physics2D.RaycastAll((Vector2)transform.position,
+													  RotatedDirection(i), dist);
+			foreach (RaycastHit2D element in hit) {
+				if (ShouldHitTag (element.transform.tag)) {
+					//HIT STUFF
+				}
+			}
+		}
+	}
+
+	Vector2 RotatedDirection(int i) {
+		return (Quaternion.AngleAxis(-angle/2, Vector3.forward)) * direction ;
 	}
 
 
