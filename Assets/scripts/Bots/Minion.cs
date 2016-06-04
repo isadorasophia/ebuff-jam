@@ -11,20 +11,24 @@ public class Minion : MonoBehaviour
     private Mode c_mode;
     private Team c_team;
 
-    public float d_speed = 0.0f; /* default speed */
+    private float d_speed   = 0.0f; /* default speed */
 
-    private float c_speed = 0.0f; /* current speed */
-    private float c_size = 0.0f; /* current size */
+    private float c_speed   = 0.0f; /* current speed */
+    private float c_acc     = 0.0f; /* current acceleration */
+    private float c_osc     = 0.0f; /* current acceleration oscilation */
+    private float c_size    = 0.0f; /* current size */
 
     /* Custom configurations */
-    public float l_speed = 5.0f;
-    public float h_speed = 15.0f;
+    public float min_speed  = 5.0f;
+    public float max_speed  = 15.0f;
 
-    public float max_size = 2;
-    public float min_size = .5f;
+    public float max_acc    = 0.0f; 
+    public float osc        = 0.0f; /* speed of oscilation */
 
-    public int min_dis = 100;
+    public float max_size   = 2;
+    public float min_size   = .5f;
 
+    public float min_dis    = 1.5f;
 
 	public string[] tagsToAvoid;
 
@@ -47,42 +51,61 @@ public class Minion : MonoBehaviour
     // called in fixed time, fancy!
     void FixedUpdate()
     {
-		
-
         /* verify range */
         float range = Vector2.Distance(transform.position, target.position);
 
+        /* work on accelaration */
+        c_osc += Time.deltaTime * osc;
+        c_acc = (Mathf.Abs(Mathf.Sin(c_osc)) + .25f) * max_acc;
+
+        /* get current speed */
+        c_speed = d_speed * c_acc;
+
+        /* should i walk or attack!? */
         if (range > min_dis)
         {
-            /* Check colision! */
+            /* before I can walk, check colision! */
             RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, min_dis);
 
-			if (hit.transform != null && ShouldAvoidTag(hit.transform.tag))
+            /* is there an object to be avoided? */
+            if (hit.transform != null && shouldAvoidTag(hit.transform.tag))
             {
                 Vector3 dir = target.position - hit.transform.position;
+
+                Debug.Log("Find obstacle!");
                 
                 /* Just turn around it */
                 if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
                 {
-                    transform.Translate(Mathf.Sign(dir.y) * Vector2.up  * d_speed * .5f * Time.deltaTime);
+                    PixelMover.Move(transform, 0, Mathf.Sign(dir.y), c_speed * .5f * Time.deltaTime);
                 }
                 else
                 {
-                    transform.Translate(Mathf.Sign(dir.x) * Vector2.right * d_speed * .5f * Time.deltaTime);
+                    PixelMover.Move(transform, Mathf.Sign(dir.x), 0, c_speed * .5f * Time.deltaTime);
                 }
             }
             else
             {
-				
-                /* Get the player! */
-                transform.position = Vector2.MoveTowards(transform.position, target.position, d_speed * Time.deltaTime);
+                Vector3 dir = target.position - transform.position;
+                float x, y;
+
+                /* Check directions */
+                x = Mathf.Abs(dir.x) > min_dis ? Mathf.Sign(dir.x) : 0;
+                y = Mathf.Abs(dir.y) > min_dis ? Mathf.Sign(dir.y) : 0;
+
+                /* go get the player! */
+                PixelMover.Move(transform, x, y, c_speed * Time.deltaTime);
+                
+                // deprecated
+                // transform.position = Vector2.MoveTowards(transform.position, target.position, d_speed * Time.deltaTime);
             }
         }
         else
         {
-            // work on the attack
+            /* attack! */
         }
 
+        /* check camera offset */
         #region CameraLimits
         var dist = (transform.position - Camera.main.transform.position).z;
 
@@ -107,17 +130,17 @@ public class Minion : MonoBehaviour
 
         if (c_mode == Mode.Cloud)
         {
-            d_speed = h_speed;
+            d_speed = max_speed;
             c_size = min_size;
         }
         else if (c_mode == Mode.Drink)
         {
-            d_speed = l_speed;
+            d_speed = min_speed;
             c_size = max_size;
         }
         else if (c_mode == Mode.Neutral)
         {
-            d_speed = (h_speed + l_speed) / 2;
+            d_speed = (max_speed + min_speed) / 2;
             c_size = 1;
         }
     }
@@ -141,13 +164,17 @@ public class Minion : MonoBehaviour
         }
     }
 
-
-
-	bool ShouldAvoidTag(string tag) {
-		foreach (string element in tagsToAvoid)
-			if (tag == element)
-				return true;
-		return false;
-	}
-
+    /* check if a given tag should be avoided */
+    bool shouldAvoidTag(string tag)
+    {
+        foreach (string element in tagsToAvoid)
+        {
+            if (tag == element)
+            {
+                return true;
+            }
+        }
+   
+        return false;
+    }
 }
