@@ -29,6 +29,7 @@ public class PlayerManager : MonoBehaviour
 	private List<StateController> players;
 
 	PlayerActions keyboardListener;
+	PlayerActions keyboardListener_alt;
 	PlayerActions joystickListener;
 
 
@@ -37,6 +38,7 @@ public class PlayerManager : MonoBehaviour
 		players = new List<StateController> ();
 		InputManager.OnDeviceDetached += OnDeviceDetached;
 		keyboardListener = PlayerActions.CreateWithKeyboardBindings();
+		keyboardListener_alt = PlayerActions.CreateWithKeyboardBindings_alt();
 		joystickListener = PlayerActions.CreateWithJoystickBindings();
 	}
 
@@ -80,6 +82,12 @@ public class PlayerManager : MonoBehaviour
 				if (ThereIsNoPlayerUsingKeyboard ()) {
 					CreatePlayer (null);
 				}
+
+				/*
+				if (ThereIsNoPlayerUsingKeyboard_alt ()) {
+					CreatePlayer (null,1);
+				}
+				 */
 			}
 	
 		} else if (state == State.InMatch) {
@@ -142,6 +150,21 @@ public class PlayerManager : MonoBehaviour
 		return null;
 	}
 
+	StateController FindPlayerUsingKeyboard_alt()
+	{
+		var playerCount = players.Count;
+		for (int i = 0; i < playerCount; i++)
+		{
+			var player = players[i];
+			if (player.actions == keyboardListener_alt)
+			{
+				return player;
+			}
+		}
+
+		return null;
+	}
+
 
 	bool ThereIsNoPlayerUsingKeyboard()
 	{
@@ -159,7 +182,7 @@ public class PlayerManager : MonoBehaviour
 	}
 
 
-	StateController CreatePlayer( InputDevice inputDevice )
+	StateController CreatePlayer( InputDevice inputDevice, int keyBoardCode=0)
 	{
 		if (players.Count < maxPlayers)
 		{
@@ -176,7 +199,10 @@ public class PlayerManager : MonoBehaviour
 			{
 				// We could create a new instance, but might as well reuse the one we have
 				// and it lets us easily find the keyboard player.
-				player.actions = keyboardListener;
+				if (keyBoardCode == 0)
+					player.actions = keyboardListener;
+				else if (keyBoardCode == 1)
+					player.actions = keyboardListener_alt;
 			}
 			else
 			{
