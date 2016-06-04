@@ -54,7 +54,11 @@ public class Minion : MonoBehaviour
             /* check colision! */
             RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, min_dis);
 
+<<<<<<< HEAD
             if (hit.transform != null && shouldAvoidTag(hit.transform.tag))
+=======
+			if (hit.transform != null && ShouldAvoidTag(hit.transform.tag))
+>>>>>>> c263b112acfa4aebd38530b587e422bc43f0479b
             {
                 Vector3 dir = target.position - hit.transform.position;
 
