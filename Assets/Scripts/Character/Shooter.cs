@@ -36,19 +36,19 @@ public class Shooter : MonoBehaviour {
 			currentDirection = Vector2.zero;
 
 
-			if (controller.actions.Left.IsPressed) {
+			if (controller.actions.Left_alt.IsPressed) {
 				currentDirection.x--;
 				timeOfLastMovement = Time.timeSinceLevelLoad;
 			}
-			if (controller.actions.Right.IsPressed) {
+			if (controller.actions.Right_alt.IsPressed) {
 				currentDirection.x++;
 				timeOfLastMovement = Time.timeSinceLevelLoad;
 			}
-			if (controller.actions.Up.IsPressed) {
+			if (controller.actions.Up_alt.IsPressed) {
 				currentDirection.y++;
 				timeOfLastMovement = Time.timeSinceLevelLoad;
 			}
-			if (controller.actions.Down.IsPressed) {
+			if (controller.actions.Down_alt.IsPressed) {
 				currentDirection.y--;
 				timeOfLastMovement = Time.timeSinceLevelLoad;
 			}
@@ -71,16 +71,25 @@ public class Shooter : MonoBehaviour {
 
 	void SetState() {
 
-		if (currentDirection.x == 0 && currentDirection.y == 0) {
+		/*  if (currentDirection.x == 0 && currentDirection.y == 0) {
 			controller.aimDirection = StateController.Direction.Down;
-		} else if (currentDirection.x < 0) {
+		} else */if (currentDirection.x < 0 && currentDirection.y == 0) {
 			controller.aimDirection = StateController.Direction.Left;
-		} else if (currentDirection.x > 0) {
+		} else if (currentDirection.x > 0 && currentDirection.y == 0) {
 			controller.aimDirection = StateController.Direction.Right;
-		} else if (currentDirection.y > 0) {
+		} else if (currentDirection.y > 0 && currentDirection.x == 0) {
 			controller.aimDirection = StateController.Direction.Up;
-		} else if (currentDirection.y < 0) {
+		} else if (currentDirection.y < 0 && currentDirection.x == 0) {
 			controller.aimDirection = StateController.Direction.Down;
-		}
+		
+		} else if (currentDirection.x > 0 && currentDirection.y > 0) {
+			controller.aimDirection = StateController.Direction.UpRight;
+		} else if (currentDirection.x > 0 && currentDirection.y < 0) {
+			controller.aimDirection = StateController.Direction.DownRight;
+		} else if (currentDirection.x < 0 && currentDirection.y > 0) {
+			controller.aimDirection = StateController.Direction.UpLeft;
+		} else if (currentDirection.x < 0 && currentDirection.y < 0) {
+			controller.aimDirection = StateController.Direction.DownLeft;
+		} 
 	}
 }

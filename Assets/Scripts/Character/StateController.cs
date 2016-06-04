@@ -4,7 +4,7 @@ using InControl;
 
 public class StateController : MonoBehaviour {
 
-	public enum Direction {Left, Right, Up, Down};
+	public enum Direction {Left, Right, Up, Down, UpLeft, UpRight, DownLeft, DownRight};
 
 	private Animator animator;
 
