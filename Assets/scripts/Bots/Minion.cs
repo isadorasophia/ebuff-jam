@@ -56,6 +56,7 @@ public class Minion : MonoBehaviour
             {
                 Vector3 dir = target.position - hit.transform.position;
                 
+                /* Just turn around it */
                 if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
                 {
                     transform.Translate(Mathf.Sign(dir.y) * Vector2.up  * d_speed * .5f * Time.deltaTime);
@@ -67,7 +68,7 @@ public class Minion : MonoBehaviour
             }
             else
             {
-                /* Get the playe! */
+                /* Get the player! */
                 transform.position = Vector2.MoveTowards(transform.position, target.position, d_speed * Time.deltaTime);
             }
         }
