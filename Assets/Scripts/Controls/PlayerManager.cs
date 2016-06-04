@@ -54,14 +54,18 @@ public class PlayerManager : MonoBehaviour
 		if (state == State.WaitingForMatchStart) {
 
 			if (players.Count < minimumPlayersForMatch) {
-				infoText.enabled = true;
-				infoText.text = "Press any button to enter game";
-				infoText.transform.position = transform.position;
-				//infoText.transform.localScale = Vector3.one * 3;
+				if (infoText != null) {
+					infoText.enabled = true;
+					infoText.text = "Press any button to enter game";
+					infoText.transform.position = transform.position;
+					//infoText.transform.localScale = Vector3.one * 3;
+				}
 			} else {
-				infoText.enabled = true;
-				infoText.text = "Press Start to Begin";
-				infoText.transform.position = transform.position;
+				if (infoText != null) {
+					infoText.enabled = true;
+					infoText.text = "Press Start to Begin";
+					infoText.transform.position = transform.position;
+				}
 			}
 
 			if (JoinButtonWasPressedOnListener (joystickListener)) {
