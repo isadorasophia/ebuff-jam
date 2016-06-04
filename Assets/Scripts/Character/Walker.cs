@@ -5,10 +5,9 @@ public class Walker : MonoBehaviour {
 
 
 	public StateController controller;
-	public float moveDelay;
+	public float speed;
 	public AudioClip[] clips;
 
-	private float timeOfLastMovement;
 	private Vector2 currentDirection;
 
 	private Animator animator;
@@ -17,7 +16,6 @@ public class Walker : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
-		timeOfLastMovement = -Time.timeSinceLevelLoad;
 		controller = gameObject.GetComponent<StateController> ();
 	}
 	
@@ -28,35 +26,29 @@ public class Walker : MonoBehaviour {
 
 
 	void FixedUpdate() {
-	
-		if (Time.timeSinceLevelLoad > timeOfLastMovement + moveDelay) {
-			currentDirection = Vector2.zero;
+
+		currentDirection = Vector2.zero;
 
 
-			if (controller.actions.Left.IsPressed) {
-				currentDirection.x--;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (controller.actions.Right.IsPressed) {
-				currentDirection.x++;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (controller.actions.Up.IsPressed) {
-				currentDirection.y++;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (controller.actions.Down.IsPressed) {
-				currentDirection.y--;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-
-			currentDirection = currentDirection.normalized;
-			Debug.Log (currentDirection.ToString ());
-
-			SetState ();
-
-			PixelMover.Move (transform, currentDirection.x, currentDirection.y);
+		if (controller.actions.Left.IsPressed) {
+			currentDirection.x--;
 		}
+		if (controller.actions.Right.IsPressed) {
+			currentDirection.x++;
+		}
+		if (controller.actions.Up.IsPressed) {
+			currentDirection.y++;
+		}
+		if (controller.actions.Down.IsPressed) {
+			currentDirection.y--;
+		}
+
+		//currentDirection = currentDirection.normalized;
+		//Debug.Log (currentDirection.ToString ());
+
+		SetState ();
+
+		PixelMover.Move (transform, currentDirection.x, currentDirection.y, speed);
 	}
 
 

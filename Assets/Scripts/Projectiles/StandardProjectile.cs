@@ -6,6 +6,7 @@ public class StandardProjectile : ProjectileBehavior {
 	public float lifetime = 3;
 	public float dist = 3, angle=60;
 	public float numberOfRaycasts = 10;
+	public float maxIntensity;
 
 	public override void Start() {
 		Boom();
@@ -20,7 +21,10 @@ public class StandardProjectile : ProjectileBehavior {
 													  RotatedDirection(i), dist);
 			foreach (RaycastHit2D element in hit) {
 				if (ShouldHitTag (element.transform.tag)) {
-					//HIT STUFF
+					Minion minion = element.transform.GetComponent<Minion> ();
+					if (minion) {
+						minion.changeMode(Minion.Mode.Neutral, RotatedDirection(i), maxIntensity*(1 - element.distance/dist));
+					}
 				}
 			}
 		}

@@ -10,7 +10,6 @@ public class Shooter : MonoBehaviour {
 	public float shotDelay;
 	public AudioClip[] clips;
 
-	private float timeOfLastMovement;
 	private float timeOfLastShot;
 	private Vector2 currentDirection;
 
@@ -20,7 +19,6 @@ public class Shooter : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
-		timeOfLastMovement = -Time.timeSinceLevelLoad;
 		controller = gameObject.GetComponent<StateController> ();
 	}
 
@@ -32,31 +30,25 @@ public class Shooter : MonoBehaviour {
 
 	void FixedUpdate() {
 
-		if (Time.timeSinceLevelLoad > timeOfLastMovement + moveDelay) {
-			currentDirection = Vector2.zero;
+		currentDirection = Vector2.zero;
 
 
-			if (controller.actions.Left_alt.IsPressed) {
-				currentDirection.x--;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (controller.actions.Right_alt.IsPressed) {
-				currentDirection.x++;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (controller.actions.Up_alt.IsPressed) {
-				currentDirection.y++;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (controller.actions.Down_alt.IsPressed) {
-				currentDirection.y--;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-
-			currentDirection = currentDirection.normalized;
-
-			SetState ();
+		if (controller.actions.Left_alt.IsPressed) {
+			currentDirection.x--;
 		}
+		if (controller.actions.Right_alt.IsPressed) {
+			currentDirection.x++;
+		}
+		if (controller.actions.Up_alt.IsPressed) {
+			currentDirection.y++;
+		}
+		if (controller.actions.Down_alt.IsPressed) {
+			currentDirection.y--;
+		}
+
+		currentDirection = currentDirection.normalized;
+
+		SetState ();
 
 
 		if (Time.timeSinceLevelLoad > timeOfLastShot + shotDelay) {

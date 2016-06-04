@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Minion : MonoBehaviour
 {
+    public enum Mode { Neutral, Cloud, Drink };
+    public enum Team { Neutral, Blue, Orange };
 
-    enum Mode { Neutral, Cloud, Drink };
-    enum Team { Neutral, Blue, Orange };
 
     /* Essential information for gameplay */
     private Mode c_mode;
@@ -124,7 +124,7 @@ public class Minion : MonoBehaviour
     }
 
     // change mode of current minion
-    void changeMode(Mode n_mode)
+	public void changeMode(Mode n_mode, Vector2 direction, float intensity=1)
     {
         this.c_mode = n_mode;
 
@@ -145,8 +145,13 @@ public class Minion : MonoBehaviour
         }
     }
 
+	// change mode of current minion
+	public void changeMode(Mode n_mode) {
+		changeMode (n_mode, Vector2.up);
+	}
+
     // change team of current minion
-    void changeTeam(Team n_team)
+    public void changeTeam(Team n_team)
     {
         this.c_team = n_team;
 
