@@ -3,13 +3,14 @@ using System.Collections;
 
 public class StandardProjectile : ProjectileBehavior {
 
-	public float lifetime = 3;
+	public float lifetime = 0.2f;
 	public float dist = 3, angle=60;
 	public float numberOfRaycasts = 10;
 	public float maxIntensity;
 
 	public override void Start() {
 		Boom();
+		Invoke ("DestroyBullet", lifetime);
 	}
 
 

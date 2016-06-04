@@ -4,14 +4,13 @@ using System.Collections;
 public class Walker : MonoBehaviour {
 
 
-	public StateController controller;
 	public float speed;
 	public AudioClip[] clips;
 
 	private Vector2 currentDirection;
 
 	private Animator animator;
-
+	private StateController controller;
 
 	// Use this for initialization
 	void Start () {
@@ -48,7 +47,7 @@ public class Walker : MonoBehaviour {
 
 		SetState ();
 
-		PixelMover.Move (transform, currentDirection.x, currentDirection.y, speed);
+		PixelMover.Move (transform, currentDirection.x, currentDirection.y, speed * Time.fixedDeltaTime);
 	}
 
 

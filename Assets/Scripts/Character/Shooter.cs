@@ -4,9 +4,7 @@ using System.Collections;
 public class Shooter : MonoBehaviour {
 
 
-	public StateController controller;
 	public GameObject projectilePrefab;
-	public float moveDelay;
 	public float shotDelay;
 	public AudioClip[] clips;
 
@@ -14,7 +12,7 @@ public class Shooter : MonoBehaviour {
 	private Vector2 currentDirection;
 
 	private Animator animator;
-
+	private StateController controller;
 
 	// Use this for initialization
 	void Start () {
@@ -56,6 +54,8 @@ public class Shooter : MonoBehaviour {
 				GameObject currentProjectile = Instantiate (projectilePrefab) as GameObject;
 				ProjectileBehavior pb = currentProjectile.GetComponent<ProjectileBehavior> ();
 				pb.direction = Vector2.up * currentDirection.y + Vector2.right * currentDirection.x;
+
+				timeOfLastShot = Time.timeSinceLevelLoad;
 			}
 		}
 	}
