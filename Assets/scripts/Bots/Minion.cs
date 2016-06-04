@@ -23,8 +23,7 @@ public class Minion : MonoBehaviour
     public float max_size = 2;
     public float min_size = .5f;
 
-    public int min_dis = 100;
-
+    public float min_dis = 1.5f;
 
 	public string[] tagsToAvoid;
 
@@ -47,35 +46,58 @@ public class Minion : MonoBehaviour
     // called in fixed time, fancy!
     void FixedUpdate()
     {
-		
-
         /* verify range */
         float range = Vector2.Distance(transform.position, target.position);
 
         if (range > min_dis)
         {
-            /* Check colision! */
+            /* check colision! */
             RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, min_dis);
 
-            if (hit.transform != null && hit.transform.tag == "Obstacle")
+            if (hit.transform != null && shouldAvoidTag(hit.transform.tag))
             {
                 Vector3 dir = target.position - hit.transform.position;
+
+                Debug.Log("Find obstacle!");
                 
                 /* Just turn around it */
                 if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
                 {
-                    transform.Translate(Mathf.Sign(dir.y) * Vector2.up  * d_speed * .5f * Time.deltaTime);
+                    PixelMover.Move(transform, 0, Mathf.Sign(dir.y), d_speed * .5f * Time.deltaTime);
                 }
                 else
                 {
-                    transform.Translate(Mathf.Sign(dir.x) * Vector2.right * d_speed * .5f * Time.deltaTime);
+                    PixelMover.Move(transform, Mathf.Sign(dir.x), 0, d_speed * .5f * Time.deltaTime);
                 }
             }
             else
             {
-				
-                /* Get the player! */
-                transform.position = Vector2.MoveTowards(transform.position, target.position, d_speed * Time.deltaTime);
+                Vector3 dir = target.position - transform.position;
+                float x, y;
+
+                /* Check directions */
+                if (Mathf.Abs(dir.x) > min_dis)
+                {
+                    x = Mathf.Sign(dir.x);
+                }
+                else
+                {
+                    x = 0;
+                }
+
+                if (Mathf.Abs(dir.y) > min_dis)
+                {
+                    y = Mathf.Sign(dir.y);
+                }
+                else
+                {
+                    y = 0;
+                }
+
+                /* Go to the player! */
+                PixelMover.Move(transform, x, y, d_speed * Time.deltaTime);
+                
+                // transform.position = Vector2.MoveTowards(transform.position, target.position, d_speed * Time.deltaTime);
             }
         }
         else
@@ -143,11 +165,17 @@ public class Minion : MonoBehaviour
 
 
 
-	bool ShouldAvoidTag(string tag) {
-		foreach (string element in tagsToAvoid)
-			if (tag == element)
-				return true;
-		return false;
-	}
+    bool shouldAvoidTag(string tag)
+    {
+        foreach (string element in tagsToAvoid)
+        {
+            if (tag == element)
+            {
+                return true;
+            }
+        }
+   
+        return false;
+    }
 
 }
