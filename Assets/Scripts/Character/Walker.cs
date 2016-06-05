@@ -52,15 +52,19 @@ public class Walker : MonoBehaviour {
 	void SetState() {
 
 		if (currentDirection.x == 0 && currentDirection.y == 0) {
-			controller.walkDirection = StateController.Direction.Down;
-		} else if (currentDirection.x < 0) {
-			controller.walkDirection = StateController.Direction.Left;
-		} else if (currentDirection.x > 0) {
-			controller.walkDirection = StateController.Direction.Right;
-		} else if (currentDirection.y > 0) {
-			controller.walkDirection = StateController.Direction.Up;
-		} else if (currentDirection.y < 0) {
-			controller.walkDirection = StateController.Direction.Down;
+			controller.SetMovement (false);
+		} else {
+			if (currentDirection.x < 0) {
+				controller.SetWalkDirection(StateController.Direction.Left);
+			} else if (currentDirection.x > 0) {
+				controller.SetWalkDirection(StateController.Direction.Right);
+			} else if (currentDirection.y > 0) {
+				controller.SetWalkDirection(StateController.Direction.Up);
+			} else if (currentDirection.y < 0) {
+				controller.SetWalkDirection(StateController.Direction.Down);
+			}
+
+			controller.SetMovement (true);
 		}
 	}
 

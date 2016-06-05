@@ -4,7 +4,7 @@ using InControl;
 
 public class StateController : MonoBehaviour {
 
-	public enum Direction {Left, Right, Up, Down, UpLeft, UpRight, DownLeft, DownRight};
+	public enum Direction {Still, Left, Right, Up, Down, UpLeft, UpRight, DownLeft, DownRight};
 	public enum WeaponType {Standard, Weapon1, Weapon2};
 
 	private Animator animator;
@@ -12,6 +12,7 @@ public class StateController : MonoBehaviour {
 	public Direction walkDirection;
 	public Direction aimDirection;
 	public WeaponType weaponType;
+	public bool isMoving;
 
 	public PlayerActions actions;
 
@@ -35,4 +36,38 @@ public class StateController : MonoBehaviour {
     void animatorUpdate()
     {
     }
+
+
+	public void SetMovement (bool itIsMoving) {
+		
+		if (itIsMoving != isMoving) {
+			isMoving = itIsMoving;
+
+			if (!itIsMoving) {
+				animator.SetTrigger ("Idle");
+			} else {
+				if (walkDirection == Direction.Right) {
+					animator.SetTrigger ("Side");
+					transform.localScale = new Vector3 (Mathf.Abs (transform.localScale.x),
+						transform.localScale.y, transform.localScale.z);
+				} else if (walkDirection == Direction.Left) {
+					animator.SetTrigger ("Side");
+					transform.localScale = new Vector3 (-Mathf.Abs (transform.localScale.x),
+						transform.localScale.y, transform.localScale.z);
+				} else if (walkDirection == Direction.Up) {
+					animator.SetTrigger ("Back");
+				} else if (walkDirection == Direction.Down) {
+					animator.SetTrigger ("Front");
+				}
+			}
+		}
+	}
+
+
+	public void SetWalkDirection(Direction d) {
+		if (d != walkDirection)
+			isMoving = false;
+
+		walkDirection = d;
+	}
 }
