@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Minion : MonoBehaviour
 {
-    public enum Mode { None, Neutral, Cloud, Drink };
-    public enum Team { None, Neutral, Blue, Orange };
+    public enum Mode { None = 0, Neutral, Cloud, Drink };
+    public enum Team { None = 0, Neutral, Blue, Orange };
 
     /* Essential information for gameplay */
     private Mode c_mode = Mode.None;
@@ -35,11 +35,14 @@ public class Minion : MonoBehaviour
 	public string[] tagsToAvoid;
 
     /* Gameplay settings */
-    public Transform target;
+    private Transform target;
+    private MSprite sprite_h;
 
     // use this for initialization
     void Start()
     {
+        sprite_h = gameObject.GetComponent<MSprite>();
+
         changeTeam(Team.Neutral);
         changeMode(Mode.Neutral);
 
@@ -51,9 +54,8 @@ public class Minion : MonoBehaviour
     {
         if (d_gameplay)
         {
-            if (c_team != Team.Neutral)
+            if (c_team != Team.Neutral && c_team != Team.None)
             {
-                Debug.Log("Go!");
                 #region EnemyMovement
                 /* verify range */
                 float range = Vector2.Distance(transform.position, target.position);
@@ -97,12 +99,14 @@ public class Minion : MonoBehaviour
                         x = Mathf.Abs(dir.x) > min_dis ? Mathf.Sign(dir.x) : 0;
                         y = Mathf.Abs(dir.y) > min_dis ? Mathf.Sign(dir.y) : 0;
 
+                        sprite_h.set_direction((int)x, (int)y);
+
                         /* go get the player! */
                         PixelMover.Move(transform, x, y, c_speed * Time.fixedDeltaTime);
                     }
                 }
                 else
-                {
+               { 
                     #region Attack
                     /* attack! */
                     #endregion
@@ -172,6 +176,8 @@ public class Minion : MonoBehaviour
     {
         if (c_team != n_team)
         {
+            sprite_h.set_team(n_team);
+
             if (n_team == Team.Blue)
             {
                 target = GameObject.FindGameObjectWithTag("Orange").transform;
@@ -187,9 +193,9 @@ public class Minion : MonoBehaviour
 
                 transform.localScale = new Vector3(c_size, c_size, 1);
             }
-        }
 
-        c_team = n_team;
+            c_team = n_team;
+        }
     }
 
     /* check if a given tag should be avoided */
