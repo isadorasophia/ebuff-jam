@@ -9,10 +9,10 @@ public class StateController : MonoBehaviour {
 
 	private Animator animator;
 
-	public Direction walkDirection;
-	public Direction aimDirection;
+	public Direction walkDirection { get; private set;}
+	public Direction aimDirection { get; private set;}
 	public WeaponType weaponType;
-	public bool isMoving;
+	public bool isMoving { get; private set;}
 
 	public PlayerActions actions;
 
@@ -69,5 +69,10 @@ public class StateController : MonoBehaviour {
 			isMoving = false;
 
 		walkDirection = d;
+	}
+
+
+	public void SetAimDirection (Direction d) {
+		aimDirection = d;
 	}
 }
