@@ -82,20 +82,15 @@ public class PlayerManager : MonoBehaviour
 
 			if (JoinButtonWasPressedOnListener (keyboardListener)) {
 				if (ThereIsNoPlayerUsingKeyboard ()) {
-					CreatePlayer (null);
-				}
-
-				/*
-				if (ThereIsNoPlayerUsingKeyboard_alt ()) {
-					CreatePlayer (null,1);
-				}
-				 */
-				else {
+					CreatePlayer (null, 0);
+				} else {
 					if (players.Count >= minimumPlayersForMatch) {
 						state = State.InMatch;
 						foreach (StateController element in players) {
 							element.transform.GetComponent<PauseGameObject> ().Resume ();
 						}
+					} else if (ThereIsNoPlayerUsingKeyboard_alt()) {
+						CreatePlayer (null, 1);
 					}
 				}
 			}
@@ -122,7 +117,6 @@ public class PlayerManager : MonoBehaviour
 	{
 		return actions.Attack.WasPressed || actions.Start.WasPressed;
 	}
-
 
 	StateController FindPlayerUsingJoystick( InputDevice inputDevice )
 	{
@@ -180,6 +174,12 @@ public class PlayerManager : MonoBehaviour
 	bool ThereIsNoPlayerUsingKeyboard()
 	{
 		return FindPlayerUsingKeyboard() == null;
+	}
+
+
+	bool ThereIsNoPlayerUsingKeyboard_alt()
+	{
+		return FindPlayerUsingKeyboard_alt() == null;
 	}
 
 

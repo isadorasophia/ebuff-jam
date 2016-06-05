@@ -57,16 +57,14 @@ public class PlayerActions : PlayerActionSet	{
 		actions.Attack.AddDefaultBinding (Mouse.LeftButton);
 
 		actions.Up.AddDefaultBinding( Key.W );
-		//actions.Up.AddDefaultBinding( Key.UpArrow );
 		actions.Down.AddDefaultBinding( Key.S );
-		//actions.Down.AddDefaultBinding( Key.DownArrow);
 		actions.Left.AddDefaultBinding( Key.A );
 		actions.Right.AddDefaultBinding( Key.D );
 
-		actions.Up_alt.AddDefaultBinding( Key.UpArrow);
-		actions.Down_alt.AddDefaultBinding( Key.DownArrow);
-		actions.Left_alt.AddDefaultBinding(Key.LeftArrow);
-		actions.Right_alt.AddDefaultBinding( Key.RightArrow);
+		actions.Up_alt.AddDefaultBinding( Key.F);
+		actions.Down_alt.AddDefaultBinding( Key.V);
+		actions.Left_alt.AddDefaultBinding(Key.C);
+		actions.Right_alt.AddDefaultBinding( Key.B);
 
 
 		actions.Start.AddDefaultBinding (Key.Return);
@@ -83,12 +81,10 @@ public class PlayerActions : PlayerActionSet	{
 		actions.Attack.AddDefaultBinding( Key.Space);
 		actions.Attack.AddDefaultBinding (Mouse.LeftButton);
 
-		actions.Up.AddDefaultBinding( Key.W );
-		//actions.Up.AddDefaultBinding( Key.UpArrow );
-		actions.Down.AddDefaultBinding( Key.S );
-		//actions.Down.AddDefaultBinding( Key.DownArrow);
-		actions.Left.AddDefaultBinding( Key.A );
-		actions.Right.AddDefaultBinding( Key.D );
+		actions.Up.AddDefaultBinding( Key.I );
+		actions.Down.AddDefaultBinding( Key.K );
+		actions.Left.AddDefaultBinding( Key.J );
+		actions.Right.AddDefaultBinding( Key.L );
 
 		actions.Up_alt.AddDefaultBinding( Key.UpArrow);
 		actions.Down_alt.AddDefaultBinding( Key.DownArrow);

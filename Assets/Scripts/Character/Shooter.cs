@@ -43,7 +43,8 @@ public class Shooter : MonoBehaviour {
 
 
 		if (Time.timeSinceLevelLoad > timeOfLastShot + shotDelay) {
-			if (controller.actions.Attack.WasPressed) {
+			if (controller.actions.Left_alt.WasPressed ||controller.actions.Right_alt.WasPressed ||
+				controller.actions.Up_alt.WasPressed || controller.actions.Down_alt.WasPressed) {
 				Shoot ();
 				timeOfLastShot = Time.timeSinceLevelLoad;
 			}
@@ -68,14 +69,6 @@ public class Shooter : MonoBehaviour {
 			pb.currentDirection = Vector2.left;
 		} else if (controller.aimDirection == StateController.Direction.Right) {
 			pb.currentDirection = Vector2.right;
-		} else if (controller.aimDirection == StateController.Direction.UpLeft) {
-			pb.currentDirection = Vector2.up + Vector2.left;
-		} else if (controller.aimDirection == StateController.Direction.UpRight) {
-			pb.currentDirection = Vector2.up + Vector2.right;
-		} else if (controller.aimDirection == StateController.Direction.DownLeft) {
-			pb.currentDirection = Vector2.down + Vector2.left;
-		} else if (controller.aimDirection == StateController.Direction.DownRight) {
-			pb.currentDirection = Vector2.down + Vector2.right;
 		}
 
 	}
@@ -86,22 +79,13 @@ public class Shooter : MonoBehaviour {
 		/*  if (currentDirection.x == 0 && currentDirection.y == 0) {
 			controller.aimDirection = StateController.Direction.Down;
 		} else */if (currentDirection.x < 0 && currentDirection.y == 0) {
-			controller.SetAimDirection(StateController.Direction.Left);
+			controller.SetAimDirection (StateController.Direction.Left);
 		} else if (currentDirection.x > 0 && currentDirection.y == 0) {
 			controller.SetAimDirection (StateController.Direction.Right);
 		} else if (currentDirection.y > 0 && currentDirection.x == 0) {
-			controller.SetAimDirection(StateController.Direction.Up);
+			controller.SetAimDirection (StateController.Direction.Up);
 		} else if (currentDirection.y < 0 && currentDirection.x == 0) {
-			controller.SetAimDirection(StateController.Direction.Down);
-		
-		} else if (currentDirection.x > 0 && currentDirection.y > 0) {
-			controller.SetAimDirection(StateController.Direction.UpRight);
-		} else if (currentDirection.x > 0 && currentDirection.y < 0) {
-			controller.SetAimDirection(StateController.Direction.DownRight);
-		} else if (currentDirection.x < 0 && currentDirection.y > 0) {
-			controller.SetAimDirection(StateController.Direction.UpLeft);
-		} else if (currentDirection.x < 0 && currentDirection.y < 0) {
-			controller.SetAimDirection(StateController.Direction.DownLeft);
-		} 
+			controller.SetAimDirection (StateController.Direction.Down);
+		}
 	}
 }
