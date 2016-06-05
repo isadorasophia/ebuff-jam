@@ -5,6 +5,9 @@ public class Shooter : MonoBehaviour {
 
 
 	public GameObject projectilePrefab;
+	public GameObject specialProjectilePrefab;
+	public float numberOfBullets;
+
 	public float shotDelay;
 	public AudioClip[] clips;
 
@@ -54,7 +57,14 @@ public class Shooter : MonoBehaviour {
 
 	void Shoot() {
 
-		GameObject currentProjectile = Instantiate (projectilePrefab) as GameObject;
+
+		GameObject currentProjectile;
+		if (numberOfBullets <= 0) {
+			currentProjectile = Instantiate (projectilePrefab) as GameObject;
+		} else {
+			currentProjectile = Instantiate (specialProjectilePrefab) as GameObject;
+			numberOfBullets--;
+		}
 
 
 		ProjectileBehavior pb = currentProjectile.GetComponent<ProjectileBehavior> ();
