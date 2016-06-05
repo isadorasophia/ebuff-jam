@@ -73,6 +73,9 @@ public class Minion : MonoBehaviour
                     /* before I can walk, check colision! */
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, 15);
 
+                    if (hit != null)
+                        Debug.Log("q");
+
                     /* is there an object to be avoided? */
                     if (hit.transform != null && hit.transform.tag == "Obstacle")
                     {
