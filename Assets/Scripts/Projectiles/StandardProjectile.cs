@@ -45,7 +45,7 @@ public class StandardProjectile : ProjectileBehavior {
 	}
 
 	Vector2 RotatedDirection(int i) {
-		return (Quaternion.AngleAxis(-angle/2 + i * angle/numberOfRaycasts, Vector3.forward)) * direction ;
+		return (Quaternion.AngleAxis(-angle/2 + i * angle/numberOfRaycasts, Vector3.forward)) * currentDirection ;
 	}
 
 

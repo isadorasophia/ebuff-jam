@@ -58,25 +58,25 @@ public class Shooter : MonoBehaviour {
 		currentProjectile.transform.position = transform.position;
 
 		ProjectileBehavior pb = currentProjectile.GetComponent<ProjectileBehavior> ();
+		pb.team = controller.team;
 
 		if (controller.aimDirection == StateController.Direction.Up) {
-			pb.direction = Vector2.up;
+			pb.currentDirection = Vector2.up;
 		} else if (controller.aimDirection == StateController.Direction.Down) {
-			pb.direction = Vector2.down;
+			pb.currentDirection = Vector2.down;
 		} else if (controller.aimDirection == StateController.Direction.Left) {
-			pb.direction = Vector2.left;
+			pb.currentDirection = Vector2.left;
 		} else if (controller.aimDirection == StateController.Direction.Right) {
-			pb.direction = Vector2.right;
+			pb.currentDirection = Vector2.right;
 		} else if (controller.aimDirection == StateController.Direction.UpLeft) {
-			pb.direction = Vector2.up + Vector2.left;
+			pb.currentDirection = Vector2.up + Vector2.left;
 		} else if (controller.aimDirection == StateController.Direction.UpRight) {
-			pb.direction = Vector2.up + Vector2.right;
+			pb.currentDirection = Vector2.up + Vector2.right;
 		} else if (controller.aimDirection == StateController.Direction.DownLeft) {
-			pb.direction = Vector2.down + Vector2.left;
+			pb.currentDirection = Vector2.down + Vector2.left;
 		} else if (controller.aimDirection == StateController.Direction.DownRight) {
-			pb.direction = Vector2.down + Vector2.right;
+			pb.currentDirection = Vector2.down + Vector2.right;
 		}
-
 
 	}
 

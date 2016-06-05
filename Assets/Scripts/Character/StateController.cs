@@ -9,6 +9,7 @@ public class StateController : MonoBehaviour {
 
 	private Animator animator;
 
+	public PlayerManager.Team team;
 	public Direction walkDirection { get; private set;}
 	public Direction aimDirection { get; private set;}
 	public WeaponType weaponType;

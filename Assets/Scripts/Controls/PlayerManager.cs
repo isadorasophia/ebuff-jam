@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour
 {
 	public enum State {WaitingForMatchStart, InMatch, MatchEnded};
+	public enum Team {Orange, blue};
 	public static int winner = 0;
 	public int minimumPlayersForMatch;
 
@@ -205,6 +206,12 @@ public class PlayerManager : MonoBehaviour
           	var player = gameObject.GetComponent<StateController>();
 			gameObject.GetComponent<Animator> ().runtimeAnimatorController = animators[players.Count];
 			gameObject.GetComponent<PauseGameObject> ().Pause ();
+
+			if (players.Count == 0)
+				player.team = Team.blue;
+			else {
+				player.team = Team.Orange;
+			}
 
 			if (inputDevice == null)
 			{
