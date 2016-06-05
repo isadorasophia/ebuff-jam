@@ -38,7 +38,11 @@ public class ProjectileFast : ProjectileBehavior {
 							// Debug.Log ("Boom! In " + element.transform.tag);
 
 							minion.changeMode ((Minion.Mode)mode);
-							minion.changeTeam ((Minion.Team)team);
+
+                            if (mode != PlayerManager.Mode.Neutral)
+                            {
+                                minion.changeTeam((Minion.Team)team);
+                            }
 						}
 					}
 				}
