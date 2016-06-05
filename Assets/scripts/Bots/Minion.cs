@@ -33,6 +33,8 @@ public class Minion : MonoBehaviour
     public float min_dis    = 3;
 
 	public string[] tagsToAvoid;
+    public LayerMask obs_layer;
+    public LayerMask hit_layer;
 
     /* Gameplay settings */
     private Transform target;
@@ -58,6 +60,7 @@ public class Minion : MonoBehaviour
             {
                 #region EnemyMovement
                 /* verify range */
+                Vector3 dir = target.position - transform.position;
                 float range = Vector2.Distance(transform.position, target.position);
 
                 /* work on accelaration */
@@ -70,45 +73,34 @@ public class Minion : MonoBehaviour
                 /* should i walk or attack!? */
                 if (range > min_dis)
                 {
+                    Vector3 m_rb = GetComponent<BoxCollider2D>().offset;
+
+                    float sin = Mathf.Sin(-Mathf.PI / 4);
+                    float cos = Mathf.Cos(-Mathf.PI / 4);
+
+                    Vector3 starter = transform.position - m_rb;
+
                     /* before I can walk, check colision! */
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, 15);
+                    RaycastHit2D hit = Physics2D.Raycast(starter, dir, dir.magnitude, obs_layer);
 
-                    if (hit != null)
-                        Debug.Log("q");
-
-                    /* is there an object to be avoided? */
-                    if (hit.transform != null && hit.transform.tag == "Obstacle")
+                    for (int i = 0; i < 8 && hit; i++)
                     {
-                        Vector3 dir = target.position - hit.transform.position;
+                        dir = new Vector2(dir.x * cos - dir.y * sin,
+                                          dir.x * sin + dir.y * cos);
 
-                        Debug.Log("Find obstacle!");
-
-                        /* Just turn around it */
-                        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-                        {
-                            PixelMover.Move(transform, 0, Mathf.Sign(dir.y), c_speed * .5f * Time.fixedDeltaTime);
-                        }
-                        else
-                        {
-                            PixelMover.Move(transform, Mathf.Sign(dir.x), 0, c_speed * .5f * Time.fixedDeltaTime);
-                        }
+                        hit = Physics2D.Raycast(starter, dir, dir.magnitude, obs_layer);
                     }
-                    else
-                    {
-                        Vector3 final_pos = target.position;
+                    
+                    float x, y;
 
-                        Vector3 dir = final_pos - transform.position;
-                        float x, y;
+                    /* Check directions */
+                    x = Mathf.Abs(dir.x) > min_dis ? Mathf.Sign(dir.x) : 0;
+                    y = Mathf.Abs(dir.y) > min_dis ? Mathf.Sign(dir.y) : 0;
 
-                        /* Check directions */
-                        x = Mathf.Abs(dir.x) > min_dis ? Mathf.Sign(dir.x) : 0;
-                        y = Mathf.Abs(dir.y) > min_dis ? Mathf.Sign(dir.y) : 0;
+                    sprite_h.set_direction((int)x, (int)y);
 
-                        sprite_h.set_direction((int)x, (int)y);
-
-                        /* go get the player! */
-                        PixelMover.Move(transform, x, y, c_speed * Time.fixedDeltaTime);
-                    }
+                    /* go get the player! */
+                    PixelMover.Move(transform, x, y, c_speed * Time.fixedDeltaTime);
                 }
                 else
                { 
@@ -221,9 +213,21 @@ public class Minion : MonoBehaviour
     {
         float acc = weapon_acc * intensity,
               delta = acc/15;
-        
+
         while (acc > 0)
         {
+
+            /* before I can be dragged, check colision! */
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, min_dis, hit_layer);
+
+            if (hit)
+            {
+                d_gameplay = true;
+                c_osc = 0;
+
+                yield break;
+            }
+
             PixelMover.Move(transform, direction.x, direction.y, acc * Time.fixedDeltaTime);
 
             yield return new WaitForSeconds(Time.fixedDeltaTime);
