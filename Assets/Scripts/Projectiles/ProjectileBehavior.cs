@@ -3,7 +3,9 @@ using System.Collections;
 
 public abstract class ProjectileBehavior : MonoBehaviour {
 
-	public Vector2 direction;
+	public PlayerManager.Team team;
+	public Vector2 currentDirection;
+	public float speed;
 	public string[] tagsToHit;
 
 	// Use this for initialization
@@ -13,7 +15,7 @@ public abstract class ProjectileBehavior : MonoBehaviour {
 	
 	// Update is called once per frame
 	public virtual void  Update () {
-
+		PixelMover.Move (transform, currentDirection.x, currentDirection.y, speed * Time.deltaTime);
 	}
 
 

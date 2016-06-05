@@ -4,15 +4,16 @@ using InControl;
 
 public class StateController : MonoBehaviour {
 
-	public enum Direction {Still, Left, Right, Up, Down, UpLeft, UpRight, DownLeft, DownRight};
+	public enum Direction {Still, Left, Right, Up, Down};
 	public enum WeaponType {Standard, Weapon1, Weapon2};
 
 	private Animator animator;
 
-	public Direction walkDirection;
-	public Direction aimDirection;
+	public PlayerManager.Team team;
+	public Direction walkDirection { get; private set;}
+	public Direction aimDirection { get; private set;}
 	public WeaponType weaponType;
-	public bool isMoving;
+	public bool isMoving { get; private set;}
 
 	public PlayerActions actions;
 
@@ -42,24 +43,7 @@ public class StateController : MonoBehaviour {
 		
 		if (itIsMoving != isMoving) {
 			isMoving = itIsMoving;
-
-			if (!itIsMoving) {
-				animator.SetTrigger ("Idle");
-			} else {
-				if (walkDirection == Direction.Right) {
-					animator.SetTrigger ("Side");
-					transform.localScale = new Vector3 (Mathf.Abs (transform.localScale.x),
-						transform.localScale.y, transform.localScale.z);
-				} else if (walkDirection == Direction.Left) {
-					animator.SetTrigger ("Side");
-					transform.localScale = new Vector3 (-Mathf.Abs (transform.localScale.x),
-						transform.localScale.y, transform.localScale.z);
-				} else if (walkDirection == Direction.Up) {
-					animator.SetTrigger ("Back");
-				} else if (walkDirection == Direction.Down) {
-					animator.SetTrigger ("Front");
-				}
-			}
+			UpdateState ();
 		}
 	}
 
@@ -69,5 +53,70 @@ public class StateController : MonoBehaviour {
 			isMoving = false;
 
 		walkDirection = d;
+	}
+
+
+	public void SetAimDirection (Direction d) {
+		
+		if (d != aimDirection) {
+			aimDirection = d;
+			UpdateState ();
+		}
+	}
+
+
+	void UpdateState() {
+		if (!isMoving) {
+			if (aimDirection == Direction.Right) {
+				animator.SetTrigger ("Idle");
+				transform.localScale = new Vector3 (Mathf.Abs (transform.localScale.x),
+					transform.localScale.y, transform.localScale.z);
+			} else if (aimDirection == Direction.Left) {
+				animator.SetTrigger ("Idle");
+				transform.localScale = new Vector3 (-Mathf.Abs (transform.localScale.x),
+					transform.localScale.y, transform.localScale.z);
+			} else if (aimDirection == Direction.Up) {
+				animator.SetTrigger ("UpIdle");
+			} else if (aimDirection == Direction.Down) {
+				animator.SetTrigger ("DownIdle");
+			}
+
+		} else {
+			if (aimDirection == Direction.Right) {
+
+				if (walkDirection == Direction.Left) {
+					animator.SetTrigger ("SideInverted");
+				} else {
+					animator.SetTrigger ("Side");
+				}
+				transform.localScale = new Vector3 (Mathf.Abs (transform.localScale.x),
+					transform.localScale.y, transform.localScale.z);
+
+			} else if (aimDirection == Direction.Left) {
+
+				if (walkDirection == Direction.Right) {
+					animator.SetTrigger ("SideInverted");
+				} else {
+					animator.SetTrigger ("Side");
+				}
+				transform.localScale = new Vector3 (-Mathf.Abs (transform.localScale.x),
+					transform.localScale.y, transform.localScale.z);
+
+			} else if (aimDirection == Direction.Up) {
+
+				if (walkDirection == Direction.Down) {
+					animator.SetTrigger ("BackInverted");
+				} else {
+					animator.SetTrigger ("Back");
+				}
+			} else if (aimDirection == Direction.Down) {
+
+				if (walkDirection == Direction.Up) {
+					animator.SetTrigger ("FrontInverted");
+				} else {
+					animator.SetTrigger ("Front");
+				}
+			}
+		}
 	}
 }

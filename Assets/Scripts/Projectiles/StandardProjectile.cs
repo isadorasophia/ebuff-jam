@@ -36,7 +36,6 @@ public class StandardProjectile : ProjectileBehavior {
 						// Debug.Log ("Boom! In " + element.transform.tag);
                         
                         minion.changeMode(Minion.Mode.Neutral, element.transform.position - transform.position, Mathf.Max(maxIntensity * (1 - element.distance / dist), .5f));
-                        minion.changeTeam(Minion.Team.Blue);
 					}
 				}
 			}
@@ -46,7 +45,7 @@ public class StandardProjectile : ProjectileBehavior {
 	}
 
 	Vector2 RotatedDirection(int i) {
-		return (Quaternion.AngleAxis(-angle/2 + i * angle/numberOfRaycasts, Vector3.forward)) * direction ;
+		return (Quaternion.AngleAxis(-angle/2 + i * angle/numberOfRaycasts, Vector3.forward)) * currentDirection ;
 	}
 
 

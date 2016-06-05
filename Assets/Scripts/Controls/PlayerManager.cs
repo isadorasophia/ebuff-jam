@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour
 {
 	public enum State {WaitingForMatchStart, InMatch, MatchEnded};
+	public enum Team {Orange, blue};
 	public static int winner = 0;
 	public int minimumPlayersForMatch;
 
@@ -81,20 +82,15 @@ public class PlayerManager : MonoBehaviour
 
 			if (JoinButtonWasPressedOnListener (keyboardListener)) {
 				if (ThereIsNoPlayerUsingKeyboard ()) {
-					CreatePlayer (null);
-				}
-
-				/*
-				if (ThereIsNoPlayerUsingKeyboard_alt ()) {
-					CreatePlayer (null,1);
-				}
-				 */
-				else {
+					CreatePlayer (null, 0);
+				} else {
 					if (players.Count >= minimumPlayersForMatch) {
 						state = State.InMatch;
 						foreach (StateController element in players) {
 							element.transform.GetComponent<PauseGameObject> ().Resume ();
 						}
+					} else if (ThereIsNoPlayerUsingKeyboard_alt()) {
+						CreatePlayer (null, 1);
 					}
 				}
 			}
@@ -121,7 +117,6 @@ public class PlayerManager : MonoBehaviour
 	{
 		return actions.Attack.WasPressed || actions.Start.WasPressed;
 	}
-
 
 	StateController FindPlayerUsingJoystick( InputDevice inputDevice )
 	{
@@ -182,6 +177,12 @@ public class PlayerManager : MonoBehaviour
 	}
 
 
+	bool ThereIsNoPlayerUsingKeyboard_alt()
+	{
+		return FindPlayerUsingKeyboard_alt() == null;
+	}
+
+
 	void OnDeviceDetached( InputDevice inputDevice )
 	{
 		var player = FindPlayerUsingJoystick( inputDevice );
@@ -205,6 +206,12 @@ public class PlayerManager : MonoBehaviour
           	var player = gameObject.GetComponent<StateController>();
 			gameObject.GetComponent<Animator> ().runtimeAnimatorController = animators[players.Count];
 			gameObject.GetComponent<PauseGameObject> ().Pause ();
+
+			if (players.Count == 0)
+				player.team = Team.blue;
+			else {
+				player.team = Team.Orange;
+			}
 
 			if (inputDevice == null)
 			{

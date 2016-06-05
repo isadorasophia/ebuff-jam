@@ -15,13 +15,8 @@ public class Walker : MonoBehaviour {
 	void Start () {
 		controller = gameObject.GetComponent<StateController> ();
 	}
-	
+
 	// Update is called once per frame
-	void FixedUpdate () {
-		
-	}
-
-
 	void Update() {
 
 		currentDirection = Vector2.zero;
@@ -45,7 +40,7 @@ public class Walker : MonoBehaviour {
 
 		SetState ();
 
-		PixelMover.Move (transform, currentDirection.x, currentDirection.y, speed * Time.fixedDeltaTime);
+		PixelMover.Move (transform, currentDirection.x, currentDirection.y, speed * Time.deltaTime);
 	}
 
 
