@@ -3,12 +3,12 @@ using System.Collections;
 
 public class Minion : MonoBehaviour
 {
-    public enum Mode { Neutral, Cloud, Drink };
-    public enum Team { Neutral, Blue, Orange };
+    public enum Mode { None, Neutral, Cloud, Drink };
+    public enum Team { None, Neutral, Blue, Orange };
 
     /* Essential information for gameplay */
-    private Mode c_mode = Mode.Neutral;
-    private Team c_team = Team.Neutral;
+    private Mode c_mode = Mode.None;
+    private Team c_team = Team.None;
 
     private float d_speed     = 0.0f; /* default speed */
 
@@ -20,17 +20,17 @@ public class Minion : MonoBehaviour
     private bool d_gameplay   = true; /* check if can continue default gameplay */
 
     /* Custom configurations */
-    public float min_speed  = 5.0f;
-    public float max_speed  = 15.0f;
+    public float min_speed  = 2.0f;
+    public float max_speed  = 5.0f;
 
-    public float weapon_acc = 0.0f;
-    public float max_acc    = 0.0f; 
-    public float osc        = 0.0f; /* speed of oscilation */
+    public float weapon_acc = 20.0f;
+    public float max_acc    = 2.0f; 
+    public float osc        = 5.0f; /* speed of oscilation */
 
-    public float max_size   = 2;
+    public float max_size   = 3;
     public float min_size   = .5f;
 
-    public float min_dis    = 1.5f;
+    public float min_dis    = 3;
 
 	public string[] tagsToAvoid;
 
@@ -42,6 +42,8 @@ public class Minion : MonoBehaviour
     {
         changeTeam(Team.Neutral);
         changeMode(Mode.Neutral);
+
+        d_gameplay = true;
     }
 
     // update is called once per frame
@@ -49,60 +51,64 @@ public class Minion : MonoBehaviour
     {
         if (d_gameplay)
         {
-            #region Movement
-            /* verify range */
-            float range = Vector2.Distance(transform.position, target.position);
-
-            /* work on accelaration */
-            c_osc += Time.deltaTime * osc;
-            c_acc = (Mathf.Abs(Mathf.Sin(c_osc)) + .25f) * max_acc;
-
-            /* get current speed */
-            c_speed = d_speed * c_acc;
-
-            /* should i walk or attack!? */
-            if (range > min_dis)
+            if (c_team != Team.Neutral)
             {
-                /* before I can walk, check colision! */
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, min_dis);
+                Debug.Log("Go!");
+                #region EnemyMovement
+                /* verify range */
+                float range = Vector2.Distance(transform.position, target.position);
 
-                /* is there an object to be avoided? */
-                if (hit.transform != null && shouldAvoidTag(hit.transform.tag))
+                /* work on accelaration */
+                c_osc += Time.deltaTime * osc;
+                c_acc = (Mathf.Abs(Mathf.Sin(c_osc)) + .25f) * max_acc;
+
+                /* get current speed */
+                c_speed = d_speed * c_acc;
+
+                /* should i walk or attack!? */
+                if (range > min_dis)
                 {
-                    Vector3 dir = target.position - hit.transform.position;
+                    /* before I can walk, check colision! */
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, min_dis);
 
-                    Debug.Log("Find obstacle!");
-
-                    /* Just turn around it */
-                    if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+                    /* is there an object to be avoided? */
+                    if (hit.transform != null && shouldAvoidTag(hit.transform.tag))
                     {
-                        PixelMover.Move(transform, 0, Mathf.Sign(dir.y), c_speed * .5f * Time.fixedDeltaTime);
+                        Vector3 dir = target.position - hit.transform.position;
+
+                        Debug.Log("Find obstacle!");
+
+                        /* Just turn around it */
+                        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+                        {
+                            PixelMover.Move(transform, 0, Mathf.Sign(dir.y), c_speed * .5f * Time.fixedDeltaTime);
+                        }
+                        else
+                        {
+                            PixelMover.Move(transform, Mathf.Sign(dir.x), 0, c_speed * .5f * Time.fixedDeltaTime);
+                        }
                     }
                     else
                     {
-                        PixelMover.Move(transform, Mathf.Sign(dir.x), 0, c_speed * .5f * Time.fixedDeltaTime);
+                        Vector3 dir = target.position - transform.position;
+                        float x, y;
+
+                        /* Check directions */
+                        x = Mathf.Abs(dir.x) > min_dis ? Mathf.Sign(dir.x) : 0;
+                        y = Mathf.Abs(dir.y) > min_dis ? Mathf.Sign(dir.y) : 0;
+
+                        /* go get the player! */
+                        PixelMover.Move(transform, x, y, c_speed * Time.fixedDeltaTime);
                     }
                 }
                 else
                 {
-                    Vector3 dir = target.position - transform.position;
-                    float x, y;
-
-                    /* Check directions */
-                    x = Mathf.Abs(dir.x) > min_dis ? Mathf.Sign(dir.x) : 0;
-                    y = Mathf.Abs(dir.y) > min_dis ? Mathf.Sign(dir.y) : 0;
-
-                    /* go get the player! */
-                    PixelMover.Move(transform, x, y, c_speed * Time.fixedDeltaTime);
+                    #region Attack
+                    /* attack! */
+                    #endregion
                 }
-            }
-            else
-            {
-                #region Attack
-                /* attack! */
                 #endregion
             }
-            #endregion
         }
 
         /* check camera offset */
@@ -147,36 +153,43 @@ public class Minion : MonoBehaviour
         else if (c_mode == Mode.Neutral)
         {
             d_speed = (max_speed + min_speed) / 2; // standard speed
-            c_size = 5;                            // size remains the default
+            c_size = 1;                            // size remains the default
 
             transform.localScale = new Vector3(c_size, c_size, 1);
 
-            /* Minion is now dragged */
-            d_gameplay = false;
-            StartCoroutine(drag(direction, intensity));
+            /* Check if minion is already been dragged */
+            if (d_gameplay != false)
+            {
+                /* Minion is now dragged */
+                d_gameplay = false;
+                StartCoroutine(drag(direction, intensity));
+            }
         }
     }
 
     // change team of current minion
     public void changeTeam(Team n_team)
     {
-        this.c_team = n_team;
-
-        if (c_team == Team.Blue)
+        if (c_team != n_team)
         {
+            if (n_team == Team.Blue)
+            {
+                target = GameObject.FindGameObjectWithTag("Orange").transform;
+            }
+            else if (n_team == Team.Orange)
+            {
+                target = GameObject.FindGameObjectWithTag("Blue").transform;
+            }
+            else if (n_team == Team.Neutral)
+            {
+                d_speed = (max_speed + min_speed) / 2; // standard speed
+                c_size = 1;                            // size remains the default
 
+                transform.localScale = new Vector3(c_size, c_size, 1);
+            }
         }
-        else if (c_team == Team.Orange)
-        {
 
-        }
-        else if (c_team == Team.Neutral)
-        {
-            d_speed = (max_speed + min_speed) / 2; // standard speed
-            c_size = 5;                            // size remains the default
-
-            transform.localScale = new Vector3(c_size, c_size, 1);
-        }
+        c_team = n_team;
     }
 
     /* check if a given tag should be avoided */
@@ -196,7 +209,7 @@ public class Minion : MonoBehaviour
     IEnumerator drag(Vector2 direction, float intensity)
     {
         float acc = weapon_acc * intensity,
-              delta = acc/25;
+              delta = acc/15;
         
         while (acc > 0)
         {
