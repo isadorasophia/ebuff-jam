@@ -63,10 +63,13 @@ public class Shooter : MonoBehaviour {
 
 		if (controller.aimDirection == StateController.Direction.Up) {
 			pb.currentDirection = Vector2.up;
+			pb.transform.Rotate (new Vector3 (0, 0, 90));
 		} else if (controller.aimDirection == StateController.Direction.Down) {
 			pb.currentDirection = Vector2.down;
+			pb.transform.Rotate (new Vector3 (0, 0, -90));
 		} else if (controller.aimDirection == StateController.Direction.Left) {
 			pb.currentDirection = Vector2.left;
+			pb.transform.Rotate (new Vector3 (0, 0, 180));
 		} else if (controller.aimDirection == StateController.Direction.Right) {
 			pb.currentDirection = Vector2.right;
 		}
@@ -76,9 +79,7 @@ public class Shooter : MonoBehaviour {
 
 	void SetState() {
 
-		/*  if (currentDirection.x == 0 && currentDirection.y == 0) {
-			controller.aimDirection = StateController.Direction.Down;
-		} else */if (currentDirection.x < 0 && currentDirection.y == 0) {
+		if (currentDirection.x < 0 && currentDirection.y == 0) {
 			controller.SetAimDirection (StateController.Direction.Left);
 		} else if (currentDirection.x > 0 && currentDirection.y == 0) {
 			controller.SetAimDirection (StateController.Direction.Right);
