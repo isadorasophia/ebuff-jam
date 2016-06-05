@@ -35,15 +35,20 @@ public class PlayerManager : MonoBehaviour
 	PlayerActions keyboardListener_alt;
 	PlayerActions joystickListener;
 
+    private RandomMap generator;
 
-	void OnEnable()
+    void OnEnable()
 	{
 		players = new List<StateController> ();
 		InputManager.OnDeviceDetached += OnDeviceDetached;
 		keyboardListener = PlayerActions.CreateWithKeyboardBindings();
 		keyboardListener_alt = PlayerActions.CreateWithKeyboardBindings_alt();
 		joystickListener = PlayerActions.CreateWithJoystickBindings();
-	}
+
+        generator = GetComponent<RandomMap>();
+
+        generator.SetMap();
+    }
 
 
 	void OnDisable()
@@ -62,7 +67,7 @@ public class PlayerManager : MonoBehaviour
 				if (infoText != null) {
 					infoText.enabled = true;
 					infoText.text = "Press any button to enter game";
-					//infoText.transform.localScale = Vector3.one * 3;
+                    //infoText.transform.localScale = Vector3.one * 3;
 				}
 			} else {
 				if (infoText != null) {
@@ -116,7 +121,9 @@ public class PlayerManager : MonoBehaviour
 			if (StartMatchButtonWasPressed ()) {
 				Scene scene = SceneManager.GetActiveScene();
 				SceneManager.LoadScene(scene.name);
-			}
+
+                generator.SetMap();
+            }
 		}
 	}
 
