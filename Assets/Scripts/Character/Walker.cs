@@ -9,12 +9,10 @@ public class Walker : MonoBehaviour {
 
 	private Vector2 currentDirection;
 
-	private Animator animator;
 	private StateController controller;
 
 	// Use this for initialization
 	void Start () {
-		animator = GetComponent<Animator> ();
 		controller = gameObject.GetComponent<StateController> ();
 	}
 	

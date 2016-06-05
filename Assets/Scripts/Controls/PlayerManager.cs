@@ -90,8 +90,12 @@ public class PlayerManager : MonoBehaviour
 				}
 				 */
 				else {
-					if (players.Count >= minimumPlayersForMatch)
+					if (players.Count >= minimumPlayersForMatch) {
 						state = State.InMatch;
+						foreach (StateController element in players) {
+							element.transform.GetComponent<PauseGameObject> ().Resume ();
+						}
+					}
 				}
 			}
 	
@@ -100,8 +104,10 @@ public class PlayerManager : MonoBehaviour
 				state = State.MatchEnded;
 			}
 		} else {
-			infoText.enabled = true;
-			infoText.text = "You are the last one standing";
+			if (infoText != null) {
+				infoText.enabled = true;
+				infoText.text = "You are the last one standing";
+			}
 
 			if (StartMatchButtonWasPressed ()) {
 				Scene scene = SceneManager.GetActiveScene();
@@ -188,7 +194,7 @@ public class PlayerManager : MonoBehaviour
 
 	StateController CreatePlayer( InputDevice inputDevice, int keyBoardCode=0)
 	{
-		if (players.Count < maxPlayers)
+		if (players.Count < maxPlayers && state == State.WaitingForMatchStart)
 		{
 			
 			var playerPosition = playerPositions[players.Count];
@@ -198,6 +204,7 @@ public class PlayerManager : MonoBehaviour
 
           	var player = gameObject.GetComponent<StateController>();
 			gameObject.GetComponent<Animator> ().runtimeAnimatorController = animators[players.Count];
+			gameObject.GetComponent<PauseGameObject> ().Pause ();
 
 			if (inputDevice == null)
 			{

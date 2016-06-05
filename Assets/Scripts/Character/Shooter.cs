@@ -11,22 +11,15 @@ public class Shooter : MonoBehaviour {
 	private float timeOfLastShot;
 	private Vector2 currentDirection;
 
-	private Animator animator;
 	private StateController controller;
 
 	// Use this for initialization
 	void Start () {
-		animator = GetComponent<Animator> ();
 		controller = gameObject.GetComponent<StateController> ();
 	}
 
-	// Update is called once per frame
-	void Update () {
 
-	}
-
-
-	void FixedUpdate() {
+	void Update() {
 
 		currentDirection = Vector2.zero;
 
@@ -52,8 +45,13 @@ public class Shooter : MonoBehaviour {
 		if (Time.timeSinceLevelLoad > timeOfLastShot + shotDelay) {
 			if (controller.actions.Attack.WasPressed) {
 				GameObject currentProjectile = Instantiate (projectilePrefab) as GameObject;
+
+				currentProjectile.transform.position = transform.position;
+
 				ProjectileBehavior pb = currentProjectile.GetComponent<ProjectileBehavior> ();
 				pb.direction = Vector2.up * currentDirection.y + Vector2.right * currentDirection.x;
+				if (pb.direction == Vector2.zero)
+					pb.direction = Vector2.right;
 
 				timeOfLastShot = Time.timeSinceLevelLoad;
 			}
