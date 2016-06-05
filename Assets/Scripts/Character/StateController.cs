@@ -5,11 +5,13 @@ using InControl;
 public class StateController : MonoBehaviour {
 
 	public enum Direction {Left, Right, Up, Down, UpLeft, UpRight, DownLeft, DownRight};
+	public enum WeaponType {Standard, Weapon1, Weapon2};
 
 	private Animator animator;
 
 	public Direction walkDirection;
 	public Direction aimDirection;
+	public WeaponType weaponType;
 
 	public PlayerActions actions;
 

@@ -59,14 +59,12 @@ public class PlayerManager : MonoBehaviour
 				if (infoText != null) {
 					infoText.enabled = true;
 					infoText.text = "Press any button to enter game";
-					infoText.transform.position = transform.position;
 					//infoText.transform.localScale = Vector3.one * 3;
 				}
 			} else {
 				if (infoText != null) {
 					infoText.enabled = true;
 					infoText.text = "Press Start to Begin";
-					infoText.transform.position = transform.position;
 				}
 			}
 
@@ -75,6 +73,9 @@ public class PlayerManager : MonoBehaviour
 
 				if (ThereIsNoPlayerUsingJoystick (inputDevice)) {
 					CreatePlayer (inputDevice);
+				} else {
+					if (players.Count >= minimumPlayersForMatch)
+						state = State.InMatch;
 				}
 			}
 
@@ -88,6 +89,10 @@ public class PlayerManager : MonoBehaviour
 					CreatePlayer (null,1);
 				}
 				 */
+				else {
+					if (players.Count >= minimumPlayersForMatch)
+						state = State.InMatch;
+				}
 			}
 	
 		} else if (state == State.InMatch) {
@@ -97,7 +102,6 @@ public class PlayerManager : MonoBehaviour
 		} else {
 			infoText.enabled = true;
 			infoText.text = "You are the last one standing";
-			infoText.transform.position = transform.position;
 
 			if (StartMatchButtonWasPressed ()) {
 				Scene scene = SceneManager.GetActiveScene();

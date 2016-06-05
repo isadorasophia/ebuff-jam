@@ -19,12 +19,12 @@ public class Walker : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		
 	}
 
 
-	void FixedUpdate() {
+	void Update() {
 
 		currentDirection = Vector2.zero;
 
