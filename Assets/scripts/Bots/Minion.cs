@@ -73,7 +73,7 @@ public class Minion : MonoBehaviour
                 /* should i walk or attack!? */
                 if (range > min_dis)
                 {
-                    Vector3 m_rb = GetComponent<BoxCollider2D>().offset;
+                    Vector3 m_rb = GetComponent<Collider2D>().offset;
 
                     float sin = Mathf.Sin(-Mathf.PI / 4);
                     float cos = Mathf.Cos(-Mathf.PI / 4);

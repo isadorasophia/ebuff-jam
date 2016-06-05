@@ -43,8 +43,8 @@ public class Shooter : MonoBehaviour {
 
 
 		if (Time.timeSinceLevelLoad > timeOfLastShot + shotDelay) {
-			if (controller.actions.Left_alt.WasPressed ||controller.actions.Right_alt.WasPressed ||
-				controller.actions.Up_alt.WasPressed || controller.actions.Down_alt.WasPressed) {
+			if (controller.actions.Left_alt.IsPressed ||controller.actions.Right_alt.IsPressed ||
+				controller.actions.Up_alt.IsPressed || controller.actions.Down_alt.IsPressed) {
 				Shoot ();
 				timeOfLastShot = Time.timeSinceLevelLoad;
 			}
@@ -56,10 +56,13 @@ public class Shooter : MonoBehaviour {
 
 		GameObject currentProjectile = Instantiate (projectilePrefab) as GameObject;
 
-		currentProjectile.transform.position = transform.position;
 
 		ProjectileBehavior pb = currentProjectile.GetComponent<ProjectileBehavior> ();
 		pb.team = controller.team;
+
+		currentProjectile.transform.parent = transform;
+		currentProjectile.transform.position = Vector3.up * 3;
+
 
 		if (controller.aimDirection == StateController.Direction.Up) {
 			pb.currentDirection = Vector2.up;
