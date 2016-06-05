@@ -13,8 +13,10 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour
 {
 	public enum State {WaitingForMatchStart, InMatch, MatchEnded};
-	public enum Team {Orange, blue};
-	public static int winner = 0;
+	public enum Team { None = 0, Neutral, Blue, Orange };
+    public enum Mode { None = 0, Neutral, ABuff, BBuff };
+
+    public static int winner = 0;
 	public int minimumPlayersForMatch;
 
 	public State state = State.WaitingForMatchStart;
@@ -207,11 +209,16 @@ public class PlayerManager : MonoBehaviour
 			gameObject.GetComponent<Animator> ().runtimeAnimatorController = animators[players.Count];
 			gameObject.GetComponent<PauseGameObject> ().Pause ();
 
-			if (players.Count == 0)
-				player.team = Team.blue;
+			if (players.Count == 0) {
+				player.team = Team.Blue;
+                gameObject.tag = "Blue";
+            }
 			else {
 				player.team = Team.Orange;
-			}
+                gameObject.tag = "Orange";
+
+                gameObject.transform.localScale = new Vector2(-gameObject.transform.localScale.x, gameObject.transform.localScale.y);
+            }
 
 			if (inputDevice == null)
 			{

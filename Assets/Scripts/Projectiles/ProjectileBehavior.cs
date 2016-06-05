@@ -4,6 +4,8 @@ using System.Collections;
 public abstract class ProjectileBehavior : MonoBehaviour {
 
 	public PlayerManager.Team team;
+    public PlayerManager.Mode mode;
+
 	public Vector2 currentDirection;
 	public float speed;
 	public string[] tagsToHit;

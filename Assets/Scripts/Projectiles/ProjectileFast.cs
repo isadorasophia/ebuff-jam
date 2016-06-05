@@ -37,8 +37,8 @@ public class ProjectileFast : ProjectileBehavior {
 						if (minion) {
 							// Debug.Log ("Boom! In " + element.transform.tag);
 
-							minion.changeMode (Minion.Mode.Cloud);
-							minion.changeTeam (team == PlayerManager.Team.blue ? Minion.Team.Blue : Minion.Team.Orange);
+							minion.changeMode ((Minion.Mode)mode);
+							minion.changeTeam ((Minion.Team)team);
 						}
 					}
 				}

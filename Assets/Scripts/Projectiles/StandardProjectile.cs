@@ -35,7 +35,8 @@ public class StandardProjectile : ProjectileBehavior {
 					if (minion) {
 						// Debug.Log ("Boom! In " + element.transform.tag);
                         
-                        minion.changeMode(Minion.Mode.Neutral, element.transform.position - transform.position, Mathf.Max(maxIntensity * (1 - element.distance / dist), .5f));
+                        minion.changeMode((Minion.Mode)mode, element.transform.position - transform.position, Mathf.Max(maxIntensity * (1 - element.distance / dist), .5f));
+                        minion.changeTeam((Minion.Team)team);
 					}
 				}
 			}

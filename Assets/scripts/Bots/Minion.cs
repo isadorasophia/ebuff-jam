@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Minion : MonoBehaviour
 {
-    public enum Mode { None = 0, Neutral, Cloud, Drink };
+    public enum Mode { None = 0, Neutral, ABuff, BBuff };
     public enum Team { None = 0, Neutral, Blue, Orange };
 
     /* Essential information for gameplay */
@@ -141,12 +141,12 @@ public class Minion : MonoBehaviour
     {
         this.c_mode = n_mode;
 
-        if (c_mode == Mode.Cloud)
+        if (c_mode == Mode.ABuff)
         {
             d_speed = max_speed;
             c_size = min_size;
         }
-        else if (c_mode == Mode.Drink)
+        else if (c_mode == Mode.BBuff)
         {
             d_speed = min_speed;
             c_size = max_size;
@@ -156,8 +156,6 @@ public class Minion : MonoBehaviour
             d_speed = (max_speed + min_speed) / 2; // standard speed
             c_size = 1;                            // size remains the default
 
-            transform.localScale = new Vector3(c_size, c_size, 1);
-
             /* Check if minion is already been dragged */
             if (d_gameplay != false)
             {
@@ -166,6 +164,8 @@ public class Minion : MonoBehaviour
                 StartCoroutine(drag(direction, intensity));
             }
         }
+
+        transform.localScale = new Vector3(c_size, c_size, 1);
     }
 
     // change team of current minion
