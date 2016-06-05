@@ -121,7 +121,7 @@ public class Minion : MonoBehaviour
         var bottomBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, dist)).y;
 
         // keep in mind that we must consider the bottom as the ground, which is corrected by .12
-        var topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, .12f, dist)).y;
+        var topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 
         // now, checks if the player desired position has passed the limits - if so, force him to stay
         transform.position = new Vector2(

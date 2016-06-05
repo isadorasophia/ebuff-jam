@@ -41,10 +41,27 @@ public class Walker : MonoBehaviour {
 		SetState ();
 
 		PixelMover.Move (transform, currentDirection.x, currentDirection.y, speed * Time.deltaTime);
-	}
+
+        /* check camera offset */
+        #region CameraLimits
+        var dist = (transform.position - Camera.main.transform.position).z;
+
+        var leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
+        var rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
+        var bottomBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, dist)).y;
+
+        // keep in mind that we must consider the bottom as the ground, which is corrected by .12
+        var topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
+
+        // now, checks if the player desired position has passed the limits - if so, force him to stay
+        transform.position = new Vector2(
+                                         Mathf.Clamp(transform.position.x, leftBorder, rightBorder),
+                                         Mathf.Clamp(transform.position.y, topBorder, bottomBorder));
+        #endregion
+    }
 
 
-	void SetState() {
+    void SetState() {
 
 		if (currentDirection.x == 0 && currentDirection.y == 0) {
 			controller.SetMovement (false);
