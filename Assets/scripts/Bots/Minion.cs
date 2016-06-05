@@ -6,22 +6,24 @@ public class Minion : MonoBehaviour
     public enum Mode { Neutral, Cloud, Drink };
     public enum Team { Neutral, Blue, Orange };
 
-
     /* Essential information for gameplay */
-    private Mode c_mode;
-    private Team c_team;
+    private Mode c_mode = Mode.Neutral;
+    private Team c_team = Team.Neutral;
 
-    private float d_speed   = 0.0f; /* default speed */
+    private float d_speed     = 0.0f; /* default speed */
 
-    private float c_speed   = 0.0f; /* current speed */
-    private float c_acc     = 0.0f; /* current acceleration */
-    private float c_osc     = 0.0f; /* current acceleration oscilation */
-    private float c_size    = 0.0f; /* current size */
+    private float c_speed     = 0.0f; /* current speed */
+    private float c_acc       = 0.0f; /* current acceleration */
+    private float c_osc       = 0.0f; /* current acceleration oscilation */
+    private float c_size      = 0.0f; /* current size */
+
+    private bool d_gameplay   = true; /* check if can continue default gameplay */
 
     /* Custom configurations */
     public float min_speed  = 5.0f;
     public float max_speed  = 15.0f;
 
+    public float weapon_acc = 0.0f;
     public float max_acc    = 0.0f; 
     public float osc        = 0.0f; /* speed of oscilation */
 
@@ -38,71 +40,69 @@ public class Minion : MonoBehaviour
     // use this for initialization
     void Start()
     {
-        changeMode(Mode.Neutral);
         changeTeam(Team.Neutral);
+        changeMode(Mode.Neutral);
     }
 
     // update is called once per frame
     void Update()
     {
-
-    }
-
-    // called in fixed time, fancy!
-    void FixedUpdate()
-    {
-        /* verify range */
-        float range = Vector2.Distance(transform.position, target.position);
-
-        /* work on accelaration */
-        c_osc += Time.deltaTime * osc;
-        c_acc = (Mathf.Abs(Mathf.Sin(c_osc)) + .25f) * max_acc;
-
-        /* get current speed */
-        c_speed = d_speed * c_acc;
-
-        /* should i walk or attack!? */
-        if (range > min_dis)
+        if (d_gameplay)
         {
-            /* before I can walk, check colision! */
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, min_dis);
+            #region Movement
+            /* verify range */
+            float range = Vector2.Distance(transform.position, target.position);
 
-            /* is there an object to be avoided? */
-            if (hit.transform != null && shouldAvoidTag(hit.transform.tag))
+            /* work on accelaration */
+            c_osc += Time.deltaTime * osc;
+            c_acc = (Mathf.Abs(Mathf.Sin(c_osc)) + .25f) * max_acc;
+
+            /* get current speed */
+            c_speed = d_speed * c_acc;
+
+            /* should i walk or attack!? */
+            if (range > min_dis)
             {
-                Vector3 dir = target.position - hit.transform.position;
+                /* before I can walk, check colision! */
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, min_dis);
 
-                Debug.Log("Find obstacle!");
-                
-                /* Just turn around it */
-                if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+                /* is there an object to be avoided? */
+                if (hit.transform != null && shouldAvoidTag(hit.transform.tag))
                 {
-                    PixelMover.Move(transform, 0, Mathf.Sign(dir.y), c_speed * .5f * Time.deltaTime);
+                    Vector3 dir = target.position - hit.transform.position;
+
+                    Debug.Log("Find obstacle!");
+
+                    /* Just turn around it */
+                    if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+                    {
+                        PixelMover.Move(transform, 0, Mathf.Sign(dir.y), c_speed * .5f * Time.fixedDeltaTime);
+                    }
+                    else
+                    {
+                        PixelMover.Move(transform, Mathf.Sign(dir.x), 0, c_speed * .5f * Time.fixedDeltaTime);
+                    }
                 }
                 else
                 {
-                    PixelMover.Move(transform, Mathf.Sign(dir.x), 0, c_speed * .5f * Time.deltaTime);
+                    Vector3 dir = target.position - transform.position;
+                    float x, y;
+
+                    /* Check directions */
+                    x = Mathf.Abs(dir.x) > min_dis ? Mathf.Sign(dir.x) : 0;
+                    y = Mathf.Abs(dir.y) > min_dis ? Mathf.Sign(dir.y) : 0;
+
+                    /* go get the player! */
+                    PixelMover.Move(transform, x, y, c_speed * Time.fixedDeltaTime);
                 }
             }
             else
             {
-                Vector3 dir = target.position - transform.position;
-                float x, y;
-
-                /* Check directions */
-                x = Mathf.Abs(dir.x) > min_dis ? Mathf.Sign(dir.x) : 0;
-                y = Mathf.Abs(dir.y) > min_dis ? Mathf.Sign(dir.y) : 0;
-
-                /* go get the player! */
-                PixelMover.Move(transform, x, y, c_speed * Time.deltaTime);
-                
-                // deprecated
-                // transform.position = Vector2.MoveTowards(transform.position, target.position, d_speed * Time.deltaTime);
+                #region Attack
+                /* attack! */
+                #endregion
             }
-        }
-        else
-        {
-            /* attack! */
+            #endregion
         }
 
         /* check camera offset */
@@ -124,7 +124,13 @@ public class Minion : MonoBehaviour
     }
 
     // change mode of current minion
-	public void changeMode(Mode n_mode, Vector2 direction, float intensity=1)
+    public void changeMode(Mode n_mode)
+    {
+        changeMode(n_mode, Vector2.up);
+    }
+
+    // change mode of current minion (default signature)
+    public void changeMode(Mode n_mode, Vector2 direction, float intensity = 1)
     {
         this.c_mode = n_mode;
 
@@ -140,15 +146,16 @@ public class Minion : MonoBehaviour
         }
         else if (c_mode == Mode.Neutral)
         {
-            d_speed = (max_speed + min_speed) / 2;
-            c_size = 1;
+            d_speed = (max_speed + min_speed) / 2; // standard speed
+            c_size = 5;                            // size remains the default
+
+            transform.localScale = new Vector3(c_size, c_size, 1);
+
+            /* Minion is now dragged */
+            d_gameplay = false;
+            StartCoroutine(drag(direction, intensity));
         }
     }
-
-	// change mode of current minion
-	public void changeMode(Mode n_mode) {
-		changeMode (n_mode, Vector2.up);
-	}
 
     // change team of current minion
     public void changeTeam(Team n_team)
@@ -165,7 +172,10 @@ public class Minion : MonoBehaviour
         }
         else if (c_team == Team.Neutral)
         {
+            d_speed = (max_speed + min_speed) / 2; // standard speed
+            c_size = 5;                            // size remains the default
 
+            transform.localScale = new Vector3(c_size, c_size, 1);
         }
     }
 
@@ -181,5 +191,22 @@ public class Minion : MonoBehaviour
         }
    
         return false;
+    }
+
+    IEnumerator drag(Vector2 direction, float intensity)
+    {
+        float acc = weapon_acc * intensity,
+              delta = acc/25;
+        
+        while (acc > 0)
+        {
+            PixelMover.Move(transform, direction.x, direction.y, acc * Time.fixedDeltaTime);
+
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+      
+            acc -= delta;
+        }
+
+        d_gameplay = true;
     }
 }
