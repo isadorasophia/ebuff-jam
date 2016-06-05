@@ -60,8 +60,8 @@ public class Shooter : MonoBehaviour {
 		ProjectileBehavior pb = currentProjectile.GetComponent<ProjectileBehavior> ();
 		pb.team = controller.team;
 
-		currentProjectile.transform.parent = transform;
-		currentProjectile.transform.position = Vector3.up * 3;
+		//currentProjectile.transform.parent = transform;
+		pb.transform.position = transform.TransformPoint (Vector3.up * 3);
 
 
 		if (controller.aimDirection == StateController.Direction.Up) {
