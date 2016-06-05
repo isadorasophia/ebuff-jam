@@ -71,10 +71,10 @@ public class Minion : MonoBehaviour
                 if (range > min_dis)
                 {
                     /* before I can walk, check colision! */
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, min_dis);
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, 15);
 
                     /* is there an object to be avoided? */
-                    if (hit.transform != null && shouldAvoidTag(hit.transform.tag))
+                    if (hit.transform != null && hit.transform.tag == "Obstacle")
                     {
                         Vector3 dir = target.position - hit.transform.position;
 
@@ -92,7 +92,9 @@ public class Minion : MonoBehaviour
                     }
                     else
                     {
-                        Vector3 dir = target.position - transform.position;
+                        Vector3 final_pos = target.position;
+
+                        Vector3 dir = final_pos - transform.position;
                         float x, y;
 
                         /* Check directions */

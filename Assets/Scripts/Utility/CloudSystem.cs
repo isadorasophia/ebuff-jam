@@ -25,7 +25,7 @@ public class CloudSystem : MonoBehaviour {
         var leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
         var rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
         var bottomBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, dist)).y;
-        var topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, .12f, dist)).y;
+        var topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 
         while (true)
         {
