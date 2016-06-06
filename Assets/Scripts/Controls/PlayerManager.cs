@@ -263,10 +263,16 @@ public class PlayerManager : MonoBehaviour
 
 	public void RemovePlayer( StateController player )
 	{
-		playerPositions.Insert(0, player.transform);
-		players.Remove( player );
-		player.actions = null;
-		Destroy( player.gameObject );
+        if (players.Count > 1)
+        {
+            playerPositions.Insert(0, player.transform);
+            players.Remove(player);
+            player.actions = null;
+            Destroy(player.gameObject);
+        } else
+        {
+            Destroy(player.gameObject);
+        }
 	}
 
 

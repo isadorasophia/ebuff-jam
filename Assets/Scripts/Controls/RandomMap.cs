@@ -84,7 +84,7 @@ public class RandomMap : MonoBehaviour
 
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(5, 15));
+            yield return new WaitForSeconds(Random.Range(2, 5));
 
             var orb = Random.Range(0, orbs.Count);
             x = Random.Range(leftBorder, rightBorder);
