@@ -7,8 +7,8 @@ public class Minion : MonoBehaviour
     public enum Team { None = 0, Neutral, Blue, Orange };
 
     /* Essential information for gameplay */
-    private Mode c_mode = Mode.None;
-    private Team c_team = Team.None;
+    private Mode c_mode = Mode.Neutral;
+    public Team c_team = Team.Neutral;
 
     private float d_speed     = 0.0f; /* default speed */
 
@@ -43,12 +43,16 @@ public class Minion : MonoBehaviour
     // use this for initialization
     void Start()
     {
+
+        d_speed = (max_speed + min_speed) / 2; // standard speed
+        c_size = 1;                            // size is the default
+
         sprite_h = gameObject.GetComponent<MSprite>();
+
+        d_gameplay = true;
 
         changeTeam(Team.Neutral);
         changeMode(Mode.Neutral);
-
-        d_gameplay = true;
     }
 
     // update is called once per frame
@@ -56,7 +60,7 @@ public class Minion : MonoBehaviour
     {
         if (d_gameplay)
         {
-            if (c_team != Team.Neutral && c_team != Team.None)
+            if (c_team != Team.Neutral && c_team != Team.None && target != null)
             {
                 #region EnemyMovement
                 /* verify range */
@@ -85,6 +89,8 @@ public class Minion : MonoBehaviour
 
                     for (int i = 0; i < 8 && hit; i++)
                     {
+                        Debug.Log(hit.transform.tag);
+
                         dir = new Vector2(dir.x * cos - dir.y * sin,
                                           dir.x * sin + dir.y * cos);
 
@@ -153,9 +159,6 @@ public class Minion : MonoBehaviour
         }
         else if (c_mode == Mode.Neutral)
         {
-            d_speed = (max_speed + min_speed) / 2; // standard speed
-            c_size = 1;                            // size remains the default
-
             /* Check if minion is already been dragged */
             if (d_gameplay != false)
             {
@@ -213,7 +216,7 @@ public class Minion : MonoBehaviour
     {
         float acc = weapon_acc * intensity,
               delta = acc/15;
-
+        
         while (acc > 0)
         {
 
