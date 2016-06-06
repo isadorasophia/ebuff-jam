@@ -20,12 +20,21 @@ public class Death : MonoBehaviour {
             {
                 if (minion.c_team == Minion.Team.Orange && gameObject.tag == "Blue")
                 {
-                    pm.RemovePlayer(gameObject.GetComponent<StateController>());
+                    StartCoroutine(Die());
                 } else if (minion.c_team == Minion.Team.Blue && gameObject.tag == "Orange")
                 {
-                    pm.RemovePlayer(gameObject.GetComponent<StateController>());
+                    StartCoroutine(Die());
                 }
             }
         }
+    }
+
+    IEnumerator Die()
+    {
+        gameObject.GetComponent<Animator>().SetBool("Dead", true);
+
+        yield return new WaitForSeconds(1);
+
+        pm.RemovePlayer(gameObject.GetComponent<StateController>());
     }
 }
