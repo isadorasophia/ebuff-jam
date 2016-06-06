@@ -10,12 +10,9 @@ public class SplashScreen : MonoBehaviour {
 
 	public float changeTime = 1f;
 
-<<<<<<< HEAD
 
 	private bool changed1, changed2, changed3, changed4, changed5;
-=======
-	private bool changed1, changed2, changed3, changed4;
->>>>>>> a27f6fc10a0cad88a06f29f9c40f09c6704b25b2
+
 
 
 	// Use this for initialization
@@ -48,14 +45,10 @@ public class SplashScreen : MonoBehaviour {
 			AudioSource.PlayClipAtPoint(clip, transform.position);
 			changed4 = true;
 		}
-<<<<<<< HEAD
 
 
 		if (Time.timeSinceLevelLoad > 5*changeTime && !changed5) {
-=======
-        
-		if (Time.timeSinceLevelLoad > 4*changeTime && !changed4) {
->>>>>>> a27f6fc10a0cad88a06f29f9c40f09c6704b25b2
+   
 			text.text = "Presents...";
 			AudioSource.PlayClipAtPoint(clip, transform.position);
 			changed4 = true;
