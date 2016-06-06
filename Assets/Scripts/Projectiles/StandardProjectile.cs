@@ -28,6 +28,7 @@ public class StandardProjectile : ProjectileBehavior {
 
 			Debug.DrawRay (transform.position, RotatedDirection(i) * 10, Color.red, 1f);
 			foreach (RaycastHit2D element in hit) {
+				Debug.Log(element.transform.tag);
 				if (ShouldHitTag (element.transform.tag) && !alreadyHit.Contains(element)) {
 					alreadyHit.Add (element);
 
@@ -35,12 +36,23 @@ public class StandardProjectile : ProjectileBehavior {
 					if (minion) {
 						// Debug.Log ("Boom! In " + element.transform.tag);
                         
-                        minion.changeMode((Minion.Mode)mode, element.transform.position - transform.position, Mathf.Max(maxIntensity * (1 - element.distance / dist), .5f));
+                        minion.changeMode((Minion.Mode)mode, element.transform.position - transform.position,
+							Mathf.Max(maxIntensity * (1 - element.distance / dist), .5f));
 
                         if (mode != PlayerManager.Mode.Neutral)
                         {
                             minion.changeTeam((Minion.Team)team);
                         }
+					}
+
+
+					PlayerDrag playerDrag = element.transform.GetComponent<PlayerDrag> ();
+					StateController playerController = element.transform.GetComponent<StateController> ();
+
+					if (playerDrag && playerController) {
+						if (playerController.team != team)
+							playerDrag.Drag (element.transform.position - transform.position, 
+								Mathf.Max(maxIntensity * (1 - element.distance / dist), 1f));
 					}
 				}
 			}

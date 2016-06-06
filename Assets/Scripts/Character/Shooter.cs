@@ -6,6 +6,7 @@ public class Shooter : MonoBehaviour {
 
 	public GameObject projectilePrefab;
 	public GameObject specialProjectilePrefab;
+	public GameObject purpleProjectileInfo, greenProjectileInfo;
 	public float numberOfBullets;
 
 	public float shotDelay;
@@ -19,6 +20,8 @@ public class Shooter : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		controller = gameObject.GetComponent<StateController> ();
+		purpleProjectileInfo = transform.GetChild (1).gameObject;
+		greenProjectileInfo =  transform.GetChild (0).gameObject ;
 	}
 
 
@@ -50,6 +53,21 @@ public class Shooter : MonoBehaviour {
 				controller.actions.Up_alt.IsPressed || controller.actions.Down_alt.IsPressed) {
 				Shoot ();
 				timeOfLastShot = Time.timeSinceLevelLoad;
+			}
+		}
+
+
+		if (numberOfBullets <= 0) {
+			purpleProjectileInfo.SetActive (false);
+			greenProjectileInfo.SetActive (false);
+		} else {
+			PlayerManager.Mode mode = specialProjectilePrefab.GetComponent<ProjectileBehavior> ().mode;
+			if (mode == PlayerManager.Mode.ABuff) {
+				greenProjectileInfo.SetActive (true);
+				purpleProjectileInfo.SetActive (false);
+			} else if (mode == PlayerManager.Mode.BBuff) {
+				purpleProjectileInfo.SetActive (true);
+				greenProjectileInfo.SetActive (false);
 			}
 		}
 	}
@@ -93,7 +111,9 @@ public class Shooter : MonoBehaviour {
 
 	void SetState() {
 
-		if (currentDirection.x < 0 && currentDirection.y == 0) {
+		if (currentDirection.x == 0 && currentDirection.y == 0) {
+			controller.SetAimDirection (StateController.Direction.Still);
+		} else if (currentDirection.x < 0 && currentDirection.y == 0) {
 			controller.SetAimDirection (StateController.Direction.Left);
 		} else if (currentDirection.x > 0 && currentDirection.y == 0) {
 			controller.SetAimDirection (StateController.Direction.Right);

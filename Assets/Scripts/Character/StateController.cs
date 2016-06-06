@@ -67,7 +67,9 @@ public class StateController : MonoBehaviour {
 
 	void UpdateState() {
 		if (!isMoving) {
-			if (aimDirection == Direction.Right) {
+			if (aimDirection == Direction.Still) {
+				animator.SetTrigger ("Idle");
+			} if (aimDirection == Direction.Right) {
 				animator.SetTrigger ("Idle");
 				transform.localScale = new Vector3 (Mathf.Abs (transform.localScale.x),
 					transform.localScale.y, transform.localScale.z);
@@ -82,7 +84,25 @@ public class StateController : MonoBehaviour {
 			}
 
 		} else {
-			if (aimDirection == Direction.Right) {
+
+			if (aimDirection == Direction.Still) {
+
+				if (walkDirection == Direction.Left) {
+					animator.SetTrigger ("Side");
+					transform.localScale = new Vector3 (-Mathf.Abs (transform.localScale.x),
+						transform.localScale.y, transform.localScale.z);
+				} else if (walkDirection == Direction.Right) {
+					animator.SetTrigger ("Side");
+					transform.localScale = new Vector3 (Mathf.Abs (transform.localScale.x),
+						transform.localScale.y, transform.localScale.z);
+
+				} else if (walkDirection == Direction.Up) {
+					animator.SetTrigger ("Back");
+				}else if (walkDirection == Direction.Down) {
+					animator.SetTrigger ("Front");
+				}
+
+			} else if (aimDirection == Direction.Right) {
 
 				if (walkDirection == Direction.Left) {
 					animator.SetTrigger ("SideInverted");

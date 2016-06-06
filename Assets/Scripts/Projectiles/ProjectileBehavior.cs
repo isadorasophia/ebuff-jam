@@ -30,8 +30,11 @@ public abstract class ProjectileBehavior : MonoBehaviour {
 
 	public bool ShouldHitTag(string tag) {
 		foreach (string element in tagsToHit)
-			if (tag == element)
+			if (tag == element) {
+				Debug.Log ("Got true");
 				return true;
+			}
+		Debug.Log ("Got false");
 		return false;
 	}
 
