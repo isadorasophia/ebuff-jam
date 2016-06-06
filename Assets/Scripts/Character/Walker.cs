@@ -54,9 +54,10 @@ public class Walker : MonoBehaviour {
         var topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 
         // now, checks if the player desired position has passed the limits - if so, force him to stay
-        transform.position = new Vector2(
+        transform.position = new Vector3(
                                          Mathf.Clamp(transform.position.x, leftBorder, rightBorder),
-                                         Mathf.Clamp(transform.position.y, topBorder, bottomBorder));
+                                         Mathf.Clamp(transform.position.y, topBorder, bottomBorder),
+										 Mathf.Clamp(transform.position.y, topBorder, bottomBorder));
         #endregion
     }
 

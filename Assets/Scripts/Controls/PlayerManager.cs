@@ -82,8 +82,13 @@ public class PlayerManager : MonoBehaviour
 				if (ThereIsNoPlayerUsingJoystick (inputDevice)) {
 					CreatePlayer (inputDevice);
 				} else {
-					if (players.Count >= minimumPlayersForMatch)
+					if (players.Count >= minimumPlayersForMatch) { 
 						state = State.InMatch;
+						infoText.text = "";
+						foreach (StateController element in players) {
+							element.transform.GetComponent<PauseGameObject> ().Resume ();
+						}
+					}
 				}
 			}
 
@@ -93,6 +98,7 @@ public class PlayerManager : MonoBehaviour
 				} else {
 					if (players.Count >= minimumPlayersForMatch) {
 						state = State.InMatch;
+						infoText.text = "";
 						foreach (StateController element in players) {
 							element.transform.GetComponent<PauseGameObject> ().Resume ();
 						}
