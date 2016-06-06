@@ -180,11 +180,15 @@ public class Minion : MonoBehaviour
 
             if (n_team == Team.Blue)
             {
-                target = GameObject.FindGameObjectWithTag("Orange").transform;
+                GameObject player_obj = GameObject.FindGameObjectWithTag("Orange");
+
+                target = player_obj == null ? null : player_obj.transform;
             }
             else if (n_team == Team.Orange)
             {
-                target = GameObject.FindGameObjectWithTag("Blue").transform;
+                GameObject player_obj = GameObject.FindGameObjectWithTag("Blue");
+
+                target = player_obj == null ? null : player_obj.transform;
             }
             else if (n_team == Team.Neutral)
             {
