@@ -29,7 +29,7 @@ public class CloudSystem : MonoBehaviour {
 
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(0, 5));
+            yield return new WaitForSeconds(Random.Range(0, 2f));
             next_spawn = Random.Range(0, clouds.Count - 1);
 
             float x, y;
