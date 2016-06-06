@@ -66,13 +66,14 @@ public class Shooter : MonoBehaviour {
 			numberOfBullets--;
 		}
 
+		PlayClip ();
+
 
 		ProjectileBehavior pb = currentProjectile.GetComponent<ProjectileBehavior> ();
 		pb.team = controller.team;
 
 		//currentProjectile.transform.parent = transform;
 		pb.transform.position = transform.TransformPoint (Vector3.up * 3);
-
 
 		if (controller.aimDirection == StateController.Direction.Up) {
 			pb.currentDirection = Vector2.up;
@@ -101,5 +102,9 @@ public class Shooter : MonoBehaviour {
 		} else if (currentDirection.y < 0 && currentDirection.x == 0) {
 			controller.SetAimDirection (StateController.Direction.Down);
 		}
+	}
+
+	public void PlayClip() {
+		AudioSource.PlayClipAtPoint (clips [Random.Range (0, clips.Length)], Vector3.forward * (-100), 0.5f);
 	}
 }

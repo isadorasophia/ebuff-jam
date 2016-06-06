@@ -118,7 +118,7 @@ public class PlayerManager : MonoBehaviour
 				infoText.text = "You are the last one standing";
 			}
 
-			if (StartMatchButtonWasPressed ()) {
+			if (JoinButtonWasPressedOnListener (joystickListener) || JoinButtonWasPressedOnListener(keyboardListener)) {
 				Scene scene = SceneManager.GetActiveScene();
 				SceneManager.LoadScene(scene.name);
 

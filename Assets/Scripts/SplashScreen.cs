@@ -11,7 +11,7 @@ public class SplashScreen : MonoBehaviour {
 	public float changeTime = 1f;
 
 
-	private bool changed1, changed2, changed3, changed4;
+	private bool changed1, changed2, changed3, changed4, changed5;
 
 
 	// Use this for initialization
@@ -49,7 +49,7 @@ public class SplashScreen : MonoBehaviour {
 		}
 
 
-		if (Time.timeSinceLevelLoad > 4*changeTime && !changed4) {
+		if (Time.timeSinceLevelLoad > 5*changeTime && !changed5) {
 			text.text = "Presents...";
 			AudioSource.PlayClipAtPoint(clip, transform.position);
 			changed4 = true;
