@@ -8,6 +8,9 @@ public class GameAudioManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		source.clip = chorus;
+		source.Play ();
+
 		source.clip = intro;
 		source.loop = false;
 		source.Play ();

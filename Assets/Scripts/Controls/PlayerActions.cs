@@ -115,10 +115,16 @@ public class PlayerActions : PlayerActionSet	{
 		actions.Left.AddDefaultBinding( InputControlType.DPadLeft );
 		actions.Right.AddDefaultBinding( InputControlType.DPadRight );
 
-		actions.Up_alt.AddDefaultBinding( InputControlType.LeftStickUp);
-		actions.Down_alt.AddDefaultBinding( InputControlType.LeftStickDown);
-		actions.Left_alt.AddDefaultBinding(InputControlType.LeftStickLeft);
-		actions.Right_alt.AddDefaultBinding( InputControlType.LeftStickRight );
+		actions.Up_alt.AddDefaultBinding( InputControlType.RightStickUp);
+		actions.Down_alt.AddDefaultBinding( InputControlType.RightStickDown);
+		actions.Left_alt.AddDefaultBinding(InputControlType.RightStickLeft);
+		actions.Right_alt.AddDefaultBinding( InputControlType.RightStickRight );
+
+		actions.Up_alt.AddDefaultBinding( InputControlType.Action4);
+		actions.Down_alt.AddDefaultBinding( InputControlType.Action1);
+		actions.Left_alt.AddDefaultBinding(InputControlType.Action3);
+		actions.Right_alt.AddDefaultBinding( InputControlType.Action2 );
+
 
 
 		actions.Start.AddDefaultBinding (InputControlType.Start);

@@ -8,6 +8,7 @@ public class StandardProjectile : ProjectileBehavior {
 	public float dist = 10, angle=60;
 	public float numberOfRaycasts = 10;
 	public float maxIntensity;
+	//public Vector3 weaponPosition;
 
 
 	private List<RaycastHit2D> alreadyHit;
@@ -16,6 +17,8 @@ public class StandardProjectile : ProjectileBehavior {
 		alreadyHit = new List<RaycastHit2D> ();
 		Boom();
 		Invoke ("DestroyBullet", lifetime);
+
+		//weaponPosition = transform.position - (Vector3)Vector2.up * 3;
 	}
 
 
@@ -28,7 +31,6 @@ public class StandardProjectile : ProjectileBehavior {
 
 			Debug.DrawRay (transform.position, RotatedDirection(i) * 10, Color.red, 1f);
 			foreach (RaycastHit2D element in hit) {
-				Debug.Log(element.transform.tag);
 				if (ShouldHitTag (element.transform.tag) && !alreadyHit.Contains(element)) {
 					alreadyHit.Add (element);
 
@@ -36,7 +38,7 @@ public class StandardProjectile : ProjectileBehavior {
 					if (minion) {
 						// Debug.Log ("Boom! In " + element.transform.tag);
                         
-                        minion.changeMode((Minion.Mode)mode, element.transform.position - transform.position,
+						minion.changeMode((Minion.Mode)mode, element.transform.position - transform.position,
 							Mathf.Max(maxIntensity * (1 - element.distance / dist), .5f));
 
                         if (mode != PlayerManager.Mode.Neutral)
@@ -50,9 +52,10 @@ public class StandardProjectile : ProjectileBehavior {
 					StateController playerController = element.transform.GetComponent<StateController> ();
 
 					if (playerDrag && playerController) {
-						if (playerController.team != team)
+						if (playerController.team != team) {
 							playerDrag.Drag (element.transform.position - transform.position, 
-								Mathf.Max(maxIntensity * (1 - element.distance / dist), 1f));
+								Mathf.Max (maxIntensity * (1 - element.distance / dist), 1f));
+						}
 					}
 				}
 			}
