@@ -18,10 +18,15 @@ public abstract class ProjectileBehavior : MonoBehaviour {
 	// Update is called once per frame
 	public virtual void  Update () {
 		PixelMover.Move (transform, currentDirection.x, currentDirection.y, speed * Time.deltaTime);
+		Boom ();
 	}
 
 
 	void OnCollisionEnter2D(Collision2D coll) {
+		if (coll.transform.tag == "Obstacle") {
+			Destroy (gameObject);
+			Debug.Log ("Destroyed");
+		}
 		if (ShouldHitTag(coll.transform.tag))
 			Boom ();
 	}

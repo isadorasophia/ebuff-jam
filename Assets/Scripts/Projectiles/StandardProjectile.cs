@@ -15,7 +15,6 @@ public class StandardProjectile : ProjectileBehavior {
 
 	public override void Start() {
 		alreadyHit = new List<RaycastHit2D> ();
-		Boom();
 		Invoke ("DestroyBullet", lifetime);
 
 		//weaponPosition = transform.position - (Vector3)Vector2.up * 3;
@@ -29,7 +28,7 @@ public class StandardProjectile : ProjectileBehavior {
 			RaycastHit2D[] hit = Physics2D.RaycastAll((Vector2)transform.position,
 													  RotatedDirection(i), dist);
 
-			Debug.DrawRay (transform.position, RotatedDirection(i) * 10, Color.red, 1f);
+			Debug.DrawRay (transform.position, RotatedDirection(i) * dist, Color.red, 1f);
 			foreach (RaycastHit2D element in hit) {
 				if (ShouldHitTag (element.transform.tag) && !alreadyHit.Contains(element)) {
 					alreadyHit.Add (element);
@@ -60,7 +59,6 @@ public class StandardProjectile : ProjectileBehavior {
 				}
 			}
 		}
-			
 		alreadyHit.Clear ();
 	}
 

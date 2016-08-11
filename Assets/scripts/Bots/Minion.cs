@@ -89,7 +89,7 @@ public class Minion : MonoBehaviour
 
                     for (int i = 0; i < 8 && hit; i++)
                     {
-                        Debug.Log(hit.transform.tag);
+                        //Debug.Log(hit.transform.tag);
 
                         dir = new Vector2(dir.x * cos - dir.y * sin,
                                           dir.x * sin + dir.y * cos);

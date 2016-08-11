@@ -94,13 +94,13 @@ public class Shooter : MonoBehaviour {
 		pb.transform.position = transform.TransformPoint (Vector3.up * 3);
 
 		if (controller.aimDirection == StateController.Direction.Up) {
-			pb.currentDirection = Vector2.up;
+			pb.currentDirection = Vector2.right;
 			pb.transform.Rotate (new Vector3 (0, 0, 90));
 		} else if (controller.aimDirection == StateController.Direction.Down) {
-			pb.currentDirection = Vector2.down;
+			pb.currentDirection = Vector2.right;
 			pb.transform.Rotate (new Vector3 (0, 0, -90));
 		} else if (controller.aimDirection == StateController.Direction.Left) {
-			pb.currentDirection = Vector2.left;
+			pb.currentDirection = Vector2.right;
 			pb.transform.Rotate (new Vector3 (0, 0, 180));
 		} else if (controller.aimDirection == StateController.Direction.Right) {
 			pb.currentDirection = Vector2.right;
