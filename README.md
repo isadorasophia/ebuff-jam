@@ -5,7 +5,7 @@ MAD minions! A game made for Ebuff 48 hour game jam, with theme "EPIDEMY"!
 - [x] arrumar collider do minion
 - [ ] deixar a música tocando (sem reiniciá-la a cada nova partida)
 - [ ] barulho de arma travada se atirar durante cooldown
-- [ ] desenho do controle dos players
+- [x] desenho do controle dos players
 - [x] arrumar animação dos minions
 
 ###### for the future...
